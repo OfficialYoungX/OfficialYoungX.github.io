@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="视频转字符画 [ RandomYang ] "><meta name="theme-color" content="#ebc65a"><title>视频转字符画 [ RandomYang ] </title><link rel="shortcut icon" href="https://source-hosting.oss-cn-shanghai.aliyuncs.com/randomyang-favicon.png"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-151544816-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-151544816-1');</script><script src="https://www.unpkg.com/valine/dist/Valine.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  new Valine({
+    el: '#comments',
+    appId: '1JY5EfOoNSaiEGcXhwrCs7dk-gzGzoHsz',
+    appKey: 'jXutXUNavOPDp92k9gQuMsv9',
+    notify: false,
+    verify: false,
+    avatar: 'mp',
+    placeholder: 'Say something...',
+  })
+})</script><script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><link rel="alternate" href="/atom.xml" title="RandomYang" type="application/atom+xml">
+</head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">RandomYang</a></h1><p>Code + Design =&gt; Magic</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">视频转字符画</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href>视频转字符画</a></h2><span class="post__date">2018-11-18</span><a href="/tags/Graphic/"><span class="post__tags">#Graphic</span></a><a href="/tags/front-end/"><span class="post__tags">#front-end</span></a><a href="/tags/canvas/"><span class="post__tags">#canvas</span></a><a href="/tags/javascript/"><span class="post__tags">#javascript</span></a><a href="/tags/字符画/"><span class="post__tags">#字符画</span></a></div></div><div class="article__content"><!-- # 视频转字符画 -->
+<h3 id="什么是字符画"><a href="#什么是字符画" class="headerlink" title="什么是字符画"></a>什么是字符画</h3><blockquote>
+<p>字符画，一种由字母、标点、汉字或其他字符组成的图画。简单的字符画是利用字符的形状代替图画的线条来构成简单的人物、事物等形象。<br>摘自<a href="https://baike.baidu.com/item/字符画/1347002?fr=aladdin" target="_blank" rel="noopener">百度百科</a></p>
+</blockquote>
+<p>我的理解是，将像素点的<strong>rgb</strong>转化为灰度，再将<strong>灰度值</strong>映射到某个<strong>字符集合</strong>（集合不唯一，可以自己定义，只要相互的形态对比度和灰度相符合就行了）</p>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>利用前端技术，具体说是canvas画布。实现下图的效果，将播放的视频动态的转化为对应的动态字符画。<br><a href="https://www.bilibili.com/video/av28184940" target="_blank" rel="noopener">这里是效果预览</a>(bilibili源)</p>
+<p><img src="/2018/11/18/视频转字符画/1.0.png" alt="1.0"></p>
+<h3 id="canvas实现"><a href="#canvas实现" class="headerlink" title="canvas实现"></a>canvas实现</h3><ol>
+<li>利用canvas从视频中<strong>间隔取样</strong></li>
+<li>得到的取样（图片）信息转化为字符串</li>
+<li>字符串插入到textarea</li>
+<li>重复123步骤，即<strong>动态字符画</strong></li>
+</ol>
+<p><a href="https://github.com/OfficialYoungX/CodeBoard/blob/master/video2charMap.html" target="_blank" rel="noopener">完整的代码</a><br>主要的javascript代码（部分html和css不太重要）：<br><pre><code class="hljs undefined"><span class="hljs-comment">// 获取video 和 canvas 的引用</span>
+  <span class="hljs-keyword">let</span> video = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'v'</span>);
+  <span class="hljs-keyword">let</span> canvas = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'c'</span>);
+  <span class="hljs-keyword">let</span> textArea = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'text-area'</span>);
+
+  <span class="hljs-comment">// 获取canvas 2D上下文对象</span>
+  <span class="hljs-keyword">let</span> ctx = canvas.getContext(<span class="hljs-string">'2d'</span>);
+
+  <span class="hljs-keyword">let</span> vStyleWidth;
+  <span class="hljs-keyword">let</span> vStyleHeight;
+
+  video.onloadedmetadata = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;
+      canvas.width = video.videoWidth; <span class="hljs-comment">// 视频宽度</span>
+      canvas.height = video.videoHeight; <span class="hljs-comment">// 视频高度</span>
+      vStyleWidth = canvas.width;
+      vStyleHeight = canvas.height;
+  &#125;
+
+  <span class="hljs-comment">// 根据 rgb 值得到灰度值</span>
+  <span class="hljs-keyword">let</span> getGray = <span class="hljs-function">(<span class="hljs-params">r, g, b</span>) =&gt;</span> &#123;
+      <span class="hljs-keyword">return</span> <span class="hljs-number">0.299</span> * r + <span class="hljs-number">0.578</span> * g + <span class="hljs-number">0.114</span> * b; <span class="hljs-comment">// 灰度值的浮点算法</span>
+  &#125;
+
+  <span class="hljs-comment">// 灰度值映射到字符</span>
+  <span class="hljs-keyword">let</span> mapToChar = <span class="hljs-function">(<span class="hljs-params">grayIndex</span>) =&gt;</span> &#123;
+      <span class="hljs-keyword">const</span> d = <span class="hljs-number">16</span>;
+      <span class="hljs-keyword">let</span> index = <span class="hljs-built_in">Math</span>.floor(grayIndex / d);
+      <span class="hljs-keyword">const</span> chars = [<span class="hljs-string">'@'</span>, <span class="hljs-string">'W'</span>, <span class="hljs-string">'#'</span>, <span class="hljs-string">'$'</span>, <span class="hljs-string">'O'</span>, <span class="hljs-string">'E'</span>, <span class="hljs-string">'X'</span>, <span class="hljs-string">'C'</span>, <span class="hljs-string">'['</span>, <span class="hljs-string">'('</span>, <span class="hljs-string">'/'</span>, <span class="hljs-string">'?'</span>, <span class="hljs-string">'='</span>, <span class="hljs-string">'^'</span>, <span class="hljs-string">'~'</span>, <span class="hljs-string">'_'</span>, <span class="hljs-string">'.'</span>, <span class="hljs-string">'`'</span>];
+      <span class="hljs-keyword">return</span> chars[index];
+  &#125;
+
+  <span class="hljs-comment">// 填充到textarea</span>
+  <span class="hljs-keyword">let</span> image2char = <span class="hljs-function">(<span class="hljs-params">ctx, width, height</span>) =&gt;</span> &#123;
+      <span class="hljs-comment">// 获取canvas上的图像信息</span>
+      <span class="hljs-keyword">let</span> imageData = ctx.getImageData(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, width, height);
+      <span class="hljs-keyword">let</span> imageDataArr = imageData.data; <span class="hljs-comment">// 图像信息数组</span>
+      <span class="hljs-keyword">let</span> imgDataWidth = imageData.width; <span class="hljs-comment">// 矩阵纬度</span>
+      <span class="hljs-keyword">let</span> imgDataHeight = imageData.height;
+      <span class="hljs-keyword">let</span> innerContext = <span class="hljs-string">''</span>;
+      <span class="hljs-keyword">let</span> p = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'p'</span>);
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> h = <span class="hljs-number">0</span>; h &lt; imgDataHeight; h += <span class="hljs-number">10</span>) &#123;
+          <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> w = <span class="hljs-number">0</span>; w &lt; imgDataWidth; w += <span class="hljs-number">6</span>) &#123;
+              <span class="hljs-keyword">let</span> index = (w + imgDataWidth * h) * <span class="hljs-number">4</span>; <span class="hljs-comment">// r b g a = 4个宽度</span>
+              <span class="hljs-keyword">let</span> r = imageDataArr[index + <span class="hljs-number">0</span>];
+              <span class="hljs-keyword">let</span> g = imageDataArr[index + <span class="hljs-number">1</span>];
+              <span class="hljs-keyword">let</span> b = imageDataArr[index + <span class="hljs-number">2</span>];
+              <span class="hljs-keyword">const</span> gray = getGray(r, g, b); <span class="hljs-comment">// 得到灰度值</span>
+              innerContext += <span class="hljs-string">`<span class="hljs-subst">$&#123;mapToChar(gray)&#125;</span>`</span>; <span class="hljs-comment">// 灰度值映射到字符</span>
+          &#125;
+          innerContext += <span class="hljs-string">'\n'</span>;
+      &#125;
+      textArea.value = innerContext;
+  &#125;
+
+
+  <span class="hljs-keyword">let</span> animationHook; <span class="hljs-comment">// 暂停hook</span>
+  <span class="hljs-keyword">let</span> draw = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;
+      animationHook = requestAnimationFrame(draw);
+      <span class="hljs-comment">// 从视频等间隔取样</span>
+      ctx.drawImage(video, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, vStyleWidth, vStyleHeight);
+      <span class="hljs-comment">// 生成的字符串输出到textarea</span>
+      image2char(ctx, vStyleWidth, vStyleHeight);
+  &#125;
+
+  video.addEventListener(<span class="hljs-string">'play'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;
+      draw();
+  &#125;, <span class="hljs-literal">false</span>);
+  video.addEventListener(<span class="hljs-string">'pause'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;
+      <span class="hljs-built_in">window</span>.cancelAnimationFrame(animationHook);
+  &#125;, <span class="hljs-literal">false</span>);
+  video.addEventListener(<span class="hljs-string">'ended'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;
+      <span class="hljs-built_in">window</span>.clearInterval(animationHook);
+  &#125;, <span class="hljs-literal">false</span>);</code></pre></p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ol>
+<li>rgb转灰度算法，又去<a href="https://www.baidu.com/link?url=-k-EdwWqAU35nrxnZL998OgCWcIIbdhLIxdtyIfCqvEjhctgBBtPJcgd3MGlLegNjbS-uZZ9MkT6bgWV_uiWPRa5hSO78IXg3vln6AXRDz5vrdUbuXLTbpsvdzt5PCaT&amp;wd=&amp;eqid=a5cc962a00270a76000000055c1f8297" target="_blank" rel="noopener">百度百科</a></li>
+<li>注意字符集合中字符的相互的形态对比度</li>
+<li>利用Image.data获取图片的像素信息</li>
+</ol>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/random-yang">Github</a></li><li><a href="https://codepen.io/randomyang">Codepen</a></li><li><a href="https://dribbble.com/randomyang">Dribbble</a></li><li><a href="https://twitter.com/JHWviuDZH8bcvuM">Twitter</a></li><li><a href="mailto:decoderyang@gmail.com">Email</a></li><li><a href="/atom.xml">Rss</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Graphic/">Graphic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regex/">Regex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebGL/">WebGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blend-mode/">blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog主题/">blog主题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css3/">css3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/design/">design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/filter/">filter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/front-end/">front-end</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/glsl/">glsl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/interesting/">interesting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mix-blend-mode/">mix-blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openGL/">openGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/p5-js/">p5.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/parallax/">parallax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pixel/">pixel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg/">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webAudio/">webAudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/借鉴/">借鉴</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/像素/">像素</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/单位/">单位</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础/">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符画/">字符画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开发/">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/摘记/">摘记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/易混/">易混</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/正则表达式/">正则表达式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/浏览器/">浏览器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/深度学习/">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/视差滚动/">视差滚动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/计算机图形学/">计算机图形学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2019/01/25/「深度学习」入门笔记/">「深度学习」入门笔记</a><a class="next-button" href="/2018/11/09/pygmies/">pygmies</a></div><div id="comments"></div></div></div></div><div class="footer"><span>©️2019-2020 Designed By&nbsp;<strong><a href="https://github.com/OfficialYoungX">RandomYang</a></strong> Powered By&nbsp;</span><strong><a href="https://hexo.io">hexo</a></strong></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>

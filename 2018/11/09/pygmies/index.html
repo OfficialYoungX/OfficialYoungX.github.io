@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="pygmies [ RandomYang ] "><meta name="theme-color" content="#ebc65a"><title>pygmies [ RandomYang ] </title><link rel="shortcut icon" href="https://source-hosting.oss-cn-shanghai.aliyuncs.com/randomyang-favicon.png"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-151544816-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-151544816-1');</script><script src="https://www.unpkg.com/valine/dist/Valine.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  new Valine({
+    el: '#comments',
+    appId: '1JY5EfOoNSaiEGcXhwrCs7dk-gzGzoHsz',
+    appKey: 'jXutXUNavOPDp92k9gQuMsv9',
+    notify: false,
+    verify: false,
+    avatar: 'mp',
+    placeholder: 'Say something...',
+  })
+})</script><script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><link rel="alternate" href="/atom.xml" title="RandomYang" type="application/atom+xml">
+</head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">RandomYang</a></h1><p>Code + Design =&gt; Magic</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">pygmies</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href>pygmies</a></h2><span class="post__date">2018-11-09</span><a href="/tags/css/"><span class="post__tags">#css</span></a><a href="/tags/webAudio/"><span class="post__tags">#webAudio</span></a><a href="/tags/web/"><span class="post__tags">#web</span></a><a href="/tags/svg/"><span class="post__tags">#svg</span></a><a href="/tags/js/"><span class="post__tags">#js</span></a><a href="/tags/interesting/"><span class="post__tags">#interesting</span></a></div></div><div class="article__content"><h3 id="预览"><a href="#预览" class="headerlink" title="预览"></a>预览</h3><p><img src="/2018/11/09/pygmies/1.0.png" alt="1.0"></p>
+<h3 id="在线demo"><a href="#在线demo" class="headerlink" title="在线demo"></a>在线demo</h3><p><a href="https://codepen.io/randomyang/pen/xQVBwG" target="_blank" rel="noopener">Dome在这</a><br>由于兼容性的问题还没解决，建议<strong>Chrome</strong>打开</p>
+<h3 id="灵感来源"><a href="#灵感来源" class="headerlink" title="灵感来源"></a>灵感来源</h3><p>某天在观看TED演讲<a href="https://www.ted.com/talks/aparna_rao_high_tech_art_with_a_sense_of_humor/discussion#t-13221" target="_blank" rel="noopener">High-tech art (with a sense of humor)</a>的时候看到里面的一个项目叫做<strong>pygmies</strong>，中文名叫<strong>俾格米人</strong>（图中的小黑人）。他们都很胆小，只要有声音就会被吓到躲到板子后面。<br>该项目的实物是由来自印度的团队制作的。测试中，俾格米人表现得惟妙惟肖，就像是一群好奇而又胆小的小动物。十分可爱!<br>于是我想用web技术似乎也能达到同样的效果。只需要浏览器调用麦克风，获取数据，作用于svg元素(当然这是最初的简单想法)。</p>
+<h3 id="准备svg素材"><a href="#准备svg素材" class="headerlink" title="准备svg素材"></a>准备svg素材</h3><p>作图工具,Mac平台<strong>sketch</strong></p>
+<p><img src="/2018/11/09/pygmies/2.0.png" alt="2.0"></p>
+<h3 id="主要代码"><a href="#主要代码" class="headerlink" title="主要代码"></a>主要代码</h3><p>html部分<br><pre><code class="hljs undefined"><span class="hljs-comment">// 主要是svg代码，量比较大，请在源码中查看</span></code></pre></p>
+<p>css部分<br><pre><code class="hljs undefined"><span class="hljs-comment">// 主要是基本的定位代码，请在源码中查看</span></code></pre></p>
+<p>js部分<br><pre><code class="hljs undefined"><span class="hljs-string">"use strict"</span>;
+
+var ctx, analyser, frequencies, getByteFrequencyDataAverage, draw;
+
+<span class="hljs-comment">// 兼容性</span>
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+<span class="hljs-comment">// 获取音频上下文</span>
+ctx = new window.AudioContext();
+
+<span class="hljs-comment">// 用户获取stream当中的时间、频率信息</span>
+analyser = ctx.createAnalyser();
+frequencies = new Uint8Array(analyser.frequencyBinCount);
+getByteFrequencyDataAverage = function() &#123;
+  <span class="hljs-comment">// 将当前频域数据拷贝进数组</span>
+  analyser.getByteFrequencyData(frequencies);
+  <span class="hljs-comment">// 求得频域的平均值</span>
+  <span class="hljs-keyword">return</span> (
+    frequencies.reduce(function(previous, current) &#123;
+      <span class="hljs-keyword">return</span> previous + current;
+    &#125;) / analyser.frequencyBinCount
+  );
+&#125;;
+
+<span class="hljs-comment">// 返回 Promise 对象</span>
+navigator.mediaDevices
+  .getUserMedia(&#123; audio: <span class="hljs-literal">true</span> &#125;)
+  .then(function(stream) &#123;
+    <span class="hljs-comment">// window.hackForMozzila = stream;</span>
+    ctx
+      .createMediaStreamSource(stream)
+      <span class="hljs-comment">// 连接到AnalyserNode</span>
+      .connect(analyser);
+  &#125;)
+  .<span class="hljs-keyword">catch</span>(function(err) &#123;
+    console.log(err.message);
+  &#125;);
+
+var pygmies = [];
+<span class="hljs-keyword">for</span> (let i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) &#123;
+  pygmies.push(document.getElementById(`pygmie-$&#123;i + <span class="hljs-number">1</span>&#125;`));
+&#125;
+
+<span class="hljs-comment">// 改变小人的位置</span>
+(draw = function() &#123;
+  var moveValue = getByteFrequencyDataAverage() * <span class="hljs-number">10</span>;
+  <span class="hljs-keyword">if</span> (moveValue &gt;= <span class="hljs-number">35</span>) &#123;
+    moveValue = <span class="hljs-number">35</span>;
+  &#125;
+  pygmies[<span class="hljs-number">0</span>].style.transform = `translate(<span class="hljs-number">51.000000</span>px, $&#123;moveValue&#125;px)`;
+  console.log(getByteFrequencyDataAverage());
+  pygmies[<span class="hljs-number">1</span>].style.transform = `translate(<span class="hljs-number">89.000000</span>px, $&#123;<span class="hljs-number">0.0</span> + moveValue&#125;px)`;
+  pygmies[<span class="hljs-number">2</span>].style.transform = `translate(<span class="hljs-number">149.000000</span>px, $&#123;<span class="hljs-number">0.0</span> + moveValue&#125;px)`;
+  pygmies[<span class="hljs-number">3</span>].style.transform = `translate(<span class="hljs-number">218.000000</span>px, $&#123;<span class="hljs-number">0.0</span> + moveValue&#125;px)`;
+  pygmies[<span class="hljs-number">4</span>].style.transform = `translate(<span class="hljs-number">286.500000</span>px, <span class="hljs-number">51.000000</span>px) rotate(<span class="hljs-number">90.000000</span>deg) translate(<span class="hljs-number">-286.500000</span>px, <span class="hljs-number">-51.000000</span>px) translate(<span class="hljs-number">275.000000</span>px, $&#123;<span class="hljs-number">34.0</span> +
+    moveValue&#125;px)`;
+  pygmies[<span class="hljs-number">5</span>].style.transform = `translate(<span class="hljs-number">286.500000</span>px, <span class="hljs-number">152.000000</span>px) rotate(<span class="hljs-number">90.000000</span>deg) translate(<span class="hljs-number">-286.500000</span>px, <span class="hljs-number">-152.000000</span>px) translate(<span class="hljs-number">275.000000</span>px, $&#123;<span class="hljs-number">135.5</span> +
+    moveValue&#125;px)`;
+  pygmies[<span class="hljs-number">6</span>].style.transform = `translate(<span class="hljs-number">286.500000</span>px, <span class="hljs-number">196.5000000</span>px) rotate(<span class="hljs-number">90.000000</span>deg) translate(<span class="hljs-number">-286.500000</span>px, <span class="hljs-number">-196.500000</span>px) translate(<span class="hljs-number">275.000000</span>px, $&#123;<span class="hljs-number">179.5</span> +
+    moveValue&#125;px)`;
+  pygmies[<span class="hljs-number">7</span>].style.transform = `translate(<span class="hljs-number">17.500000</span>px, <span class="hljs-number">173.500000</span>px) rotate(<span class="hljs-number">-90.000000</span>deg) translate(<span class="hljs-number">-17.00000</span>px, <span class="hljs-number">-173.500000</span>px) translate(<span class="hljs-number">5.500000</span>px, $&#123;<span class="hljs-number">156.5</span> +
+    moveValue&#125;px)`;
+  pygmies[<span class="hljs-number">8</span>].style.transform = `translate(<span class="hljs-number">17.000000</span>px, <span class="hljs-number">106.500000</span>px) rotate(<span class="hljs-number">-90.000000</span>deg) translate(<span class="hljs-number">-17.00000</span>px, <span class="hljs-number">-106.500000</span>px) translate(<span class="hljs-number">5.500000</span>px, $&#123;<span class="hljs-number">89.5</span> +
+    moveValue&#125;px)`;
+  pygmies[<span class="hljs-number">9</span>].style.transform = `translate(<span class="hljs-number">17.00000</span>px, <span class="hljs-number">252.500000</span>px) rotate(<span class="hljs-number">-90.000000</span>deg) translate(<span class="hljs-number">-17.00000</span>px, <span class="hljs-number">-252.500000</span>px) translate(<span class="hljs-number">5.500000</span>px, $&#123;<span class="hljs-number">235.5</span> +
+    moveValue&#125;px)`;
+  requestAnimationFrame(draw);
+&#125;)();</code></pre></p>
+<p>代码主要是做了两件事：</p>
+<ul>
+<li>获取麦克风的音频信息</li>
+<li>利用音频信息改变svg的位置信息</li>
+</ul>
+<p>只不过需要不断的循环，来获取最新的信息。</p>
+<h3 id="待优化部分"><a href="#待优化部分" class="headerlink" title="待优化部分"></a>待优化部分</h3><ul>
+<li>手动的修改每个俾格米人的位置真的很烦人；</li>
+<li>通过修改transform参数来调节俾格米人的位置，很容易出错；</li>
+<li>当俾格米人数量再多一点儿的时候，svg可能有性能缺陷；</li>
+<li>俾格米人并不唯妙唯俏，离原版的生动程度还差很远；<br>这一部分需要去考虑生物的应激性特征、分不同情况、动画曲线等方面。达到赋予每个俾格米人不同的性格特征的效果（有的胆小，有的胆大，有的好奇心强等等）。</li>
+<li>兼容性问题；</li>
+<li>…</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><blockquote>
+<p><a href="https://www.ted.com/talks/aparna_rao_high_tech_art_with_a_sense_of_humor/discussion#t-13221" target="_blank" rel="noopener">TED</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Audio_API#浏览器兼容性" target="_blank" rel="noopener">Web Audio API</a><br><a href="https://juejin.im/entry/58b3e032ac502e006ca9db51" target="_blank" rel="noopener">画随音动！Web Audio API 入门</a></p>
+</blockquote>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/random-yang">Github</a></li><li><a href="https://codepen.io/randomyang">Codepen</a></li><li><a href="https://dribbble.com/randomyang">Dribbble</a></li><li><a href="https://twitter.com/JHWviuDZH8bcvuM">Twitter</a></li><li><a href="mailto:decoderyang@gmail.com">Email</a></li><li><a href="/atom.xml">Rss</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Graphic/">Graphic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regex/">Regex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebGL/">WebGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blend-mode/">blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog主题/">blog主题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css3/">css3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/design/">design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/filter/">filter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/front-end/">front-end</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/glsl/">glsl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/interesting/">interesting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mix-blend-mode/">mix-blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openGL/">openGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/p5-js/">p5.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/parallax/">parallax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pixel/">pixel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg/">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webAudio/">webAudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/借鉴/">借鉴</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/像素/">像素</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/单位/">单位</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础/">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符画/">字符画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开发/">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/摘记/">摘记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/易混/">易混</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/正则表达式/">正则表达式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/浏览器/">浏览器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/深度学习/">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/视差滚动/">视差滚动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/计算机图形学/">计算机图形学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2018/11/18/视频转字符画/">视频转字符画</a><a class="next-button" href="/2018/10/19/2-Learn-openGL-基础光照/">(2)Learning openGL--基础光照</a></div><div id="comments"></div></div></div></div><div class="footer"><span>©️2019-2020 Designed By&nbsp;<strong><a href="https://github.com/OfficialYoungX">RandomYang</a></strong> Powered By&nbsp;</span><strong><a href="https://hexo.io">hexo</a></strong></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>

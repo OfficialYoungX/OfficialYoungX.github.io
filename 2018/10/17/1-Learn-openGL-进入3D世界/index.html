@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="(1)Learning openGL--进入3D世界 [ RandomYang ] "><meta name="theme-color" content="#ebc65a"><title>(1)Learning openGL--进入3D世界 [ RandomYang ] </title><link rel="shortcut icon" href="https://source-hosting.oss-cn-shanghai.aliyuncs.com/randomyang-favicon.png"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-151544816-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-151544816-1');</script><script src="https://www.unpkg.com/valine/dist/Valine.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  new Valine({
+    el: '#comments',
+    appId: '1JY5EfOoNSaiEGcXhwrCs7dk-gzGzoHsz',
+    appKey: 'jXutXUNavOPDp92k9gQuMsv9',
+    notify: false,
+    verify: false,
+    avatar: 'mp',
+    placeholder: 'Say something...',
+  })
+})</script><script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><link rel="alternate" href="/atom.xml" title="RandomYang" type="application/atom+xml">
+</head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">RandomYang</a></h1><p>Code + Design =&gt; Magic</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">(1)Learning openGL--进入3D世界</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href>(1)Learning openGL--进入3D世界</a></h2><span class="post__date">2018-10-17</span><a href="/tags/Graphic/"><span class="post__tags">#Graphic</span></a><a href="/tags/计算机图形学/"><span class="post__tags">#计算机图形学</span></a><a href="/tags/openGL/"><span class="post__tags">#openGL</span></a></div></div><div class="article__content"><p>最近刚好在上「计算机图形学」的课程，有机会接触到openGL的学习，openGL是一个定义了函数布局和输出的图形API的正式规范，学习openGL能对3D编程有一个很好的初步了解。</p>
+<p><strong>Content</strong><br>[TOC]</p>
+<h3 id="学习openGL你将需要知道"><a href="#学习openGL你将需要知道" class="headerlink" title="学习openGL你将需要知道"></a>学习openGL你将需要知道</h3><ul>
+<li>基本的线性代数知识（尤其是关于矩阵、向量）</li>
+<li>C++常规编程</li>
+</ul>
+<h3 id="demo代码"><a href="#demo代码" class="headerlink" title="demo代码"></a>demo代码</h3><p>主程序<code>main.cpp</code><br><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> GLEW_STATIC</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;GL/glew.h&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;GLFW/glfw3.h&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cmath&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">"shader.h"</span></span>
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">"glm/glm.hpp"</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">"glm/gtc/matrix_transform.hpp"</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">"glm/gtc/type_ptr.hpp"</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+
+<span class="hljs-comment">//设置窗口大小</span>
+<span class="hljs-keyword">const</span> GLfloat WIDTH = <span class="hljs-number">600</span>, HEIGHT = <span class="hljs-number">600</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    glfwInit();<span class="hljs-comment">//glfw初始化</span>
+    <span class="hljs-comment">//glfwWindowHint部分：设置一些关于窗口的选项，在进行绘制前的基本设置</span>
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, <span class="hljs-number">3</span>);<span class="hljs-comment">// 设置OpenGL主版本号，使用版本为3以后的，所以参数设为3</span>
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, <span class="hljs-number">3</span>);<span class="hljs-comment">// 设置OpenGL副版本号</span>
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);<span class="hljs-comment">// OpenGL模式，第二个参数表示核心模式</span>
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);<span class="hljs-comment">// for mac</span>
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);<span class="hljs-comment">// 窗口是否可调整大小，第二个参数表示不允许改变窗口大小</span>
+    <span class="hljs-comment">// 创建窗口对象</span>
+    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, <span class="hljs-string">"texture B16040517"</span>, <span class="hljs-literal">nullptr</span>, <span class="hljs-literal">nullptr</span>);
+    <span class="hljs-keyword">int</span> screenWidth, screenHeight;
+    <span class="hljs-comment">//读取窗口实际上的缓存空间，得到实际大小</span>
+    glfwGetFramebufferSize(window, &amp;screenWidth, &amp;screenHeight);
+    <span class="hljs-comment">//判断窗口是否创建成功</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-literal">nullptr</span> == window)
+    &#123;
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Failed to create GLFW window"</span> &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+        glfwTerminate();
+        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+    &#125;
+    <span class="hljs-comment">//设置当前绘制窗口</span>
+    glfwMakeContextCurrent(window);
+    <span class="hljs-comment">//启动OpenGL并判断启动是否成功</span>
+    glewExperimental = GL_TRUE;
+    <span class="hljs-keyword">if</span> (GLEW_OK != glewInit())
+    &#123;
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Failed to initialise GLEW"</span> &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+    &#125;
+    glViewport(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, screenWidth, screenHeight);<span class="hljs-comment">//设置视图大小，起点（前两个参数）及视图宽高，默认情况下为占据整个打开窗口的像素矩形</span>
+    Shader ourShader = Shader(<span class="hljs-string">"shader/core.vs"</span>, <span class="hljs-string">"shader/core.frag"</span>);
+    
+    <span class="hljs-keyword">const</span> GLfloat textureWidth = <span class="hljs-number">500</span>;
+    <span class="hljs-keyword">const</span> GLfloat textureHeight = <span class="hljs-number">500</span>;
+    <span class="hljs-keyword">const</span> GLfloat texture_xoffset = <span class="hljs-number">-250</span>;
+    GLfloat texture_xoffset_rate = texture_xoffset/(WIDTH/<span class="hljs-number">2</span>);
+    GLfloat
+    ver_1_x = -texture_xoffset_rate, ver_1_y = (textureWidth/<span class="hljs-number">2</span>)/(HEIGHT/<span class="hljs-number">2</span>),
+    ver_2_x = -texture_xoffset_rate, ver_2_y = -(textureWidth/<span class="hljs-number">2</span>)/(HEIGHT/<span class="hljs-number">2</span>),
+    ver_3_x = -(textureWidth/(WIDTH/<span class="hljs-number">2</span>)+texture_xoffset_rate), ver_3_y = -(textureHeight/<span class="hljs-number">2</span>)/(HEIGHT/<span class="hljs-number">2</span>),
+    ver_4_x = -(textureWidth/(WIDTH/<span class="hljs-number">2</span>)+texture_xoffset_rate), ver_4_y = (textureHeight/<span class="hljs-number">2</span>)/(HEIGHT/<span class="hljs-number">2</span>);
+    
+    
+    GLfloat vertices_1[] = &#123;
+        <span class="hljs-comment">//position_1             // colors</span>
+        ver_1_x,ver_1_y,<span class="hljs-number">0.0f</span>,    <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>,
+        ver_2_x,ver_2_y,<span class="hljs-number">0.0f</span>,    <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.0f</span>,
+        ver_3_x,ver_3_y,<span class="hljs-number">0.0f</span>,    <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>,
+        ver_4_x,ver_4_y,<span class="hljs-number">0.0f</span>,    <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>,
+    &#125;;
+    
+    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> indices_1[]&#123; <span class="hljs-comment">// 索引</span>
+        <span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">3</span>, <span class="hljs-comment">// 第一个三角形</span>
+        <span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">2</span> <span class="hljs-comment">// 第二个三角形</span>
+    &#125;;
+    
+    GLuint VBO[<span class="hljs-number">2</span>], VAO[<span class="hljs-number">2</span>], EBO[<span class="hljs-number">2</span>];<span class="hljs-comment">//VBO 顶点缓冲对象</span>
+    
+    glGenVertexArrays(<span class="hljs-number">1</span>, &amp;VAO[<span class="hljs-number">0</span>]);
+    glGenBuffers(<span class="hljs-number">1</span>, &amp;VBO[<span class="hljs-number">0</span>]);
+    glGenBuffers(<span class="hljs-number">1</span>, &amp;EBO[<span class="hljs-number">0</span>]);
+    <span class="hljs-comment">// 1. 绑定顶点数组对象</span>
+    glBindVertexArray(VAO[<span class="hljs-number">0</span>]);
+    <span class="hljs-comment">// 2. 把我们的顶点数组复制到一个顶点缓冲中，供OpenGL使用</span>
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[<span class="hljs-number">0</span>]);
+    glBufferData(GL_ARRAY_BUFFER, <span class="hljs-keyword">sizeof</span>(vertices_1), vertices_1, GL_STATIC_DRAW);
+    <span class="hljs-comment">// 3. 复制我们的索引数组到一个索引缓冲中，供OpenGL使用</span>
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[<span class="hljs-number">0</span>]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, <span class="hljs-keyword">sizeof</span>(indices_1), indices_1, GL_STATIC_DRAW);
+    <span class="hljs-comment">// 4. 设定顶点属性指针</span>
+    <span class="hljs-comment">// position attribute</span>
+    glVertexAttribPointer(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>, GL_FLOAT, GL_FALSE, <span class="hljs-number">6</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">float</span>), (<span class="hljs-keyword">void</span>*)<span class="hljs-number">0</span>);
+    glEnableVertexAttribArray(<span class="hljs-number">0</span>);
+    <span class="hljs-comment">// color attribute</span>
+    glVertexAttribPointer(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, GL_FLOAT, GL_FALSE, <span class="hljs-number">6</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">float</span>), (<span class="hljs-keyword">void</span>*)(<span class="hljs-number">3</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">float</span>)));
+    glEnableVertexAttribArray(<span class="hljs-number">1</span>);
+    
+    <span class="hljs-comment">// 定义变换矩阵</span>
+    
+    
+    <span class="hljs-comment">//判断窗口是否关闭，不关闭继续执行</span>
+    <span class="hljs-keyword">while</span> (!glfwWindowShouldClose(window))
+    &#123;
+        <span class="hljs-keyword">const</span> <span class="hljs-keyword">float</span> color[] = &#123;<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>&#125;;
+        glClearColor(color[<span class="hljs-number">0</span>], color[<span class="hljs-number">1</span>], color[<span class="hljs-number">2</span>], color[<span class="hljs-number">3</span>]);<span class="hljs-comment">//R,G,B,Alpha</span>
+        glClear(GL_COLOR_BUFFER_BIT);<span class="hljs-comment">//上色，背景颜色初始化</span>
+        
+        glm::mat4 transform = glm::mat4(<span class="hljs-number">1.0f</span>); <span class="hljs-comment">// 初始化为单位矩阵</span>
+        ourShader.Use();
+        transform = glm::rotate(transform, glm::radians(<span class="hljs-number">45.0f</span>)*<span class="hljs-keyword">static_cast</span>&lt;GLfloat&gt;(glfwGetTime()), glm::vec3(<span class="hljs-number">1.0f</span>,<span class="hljs-number">1.0f</span>,<span class="hljs-number">1.0f</span>));
+        transform = glm::scale(transform, glm::vec3(<span class="hljs-number">0.5f</span>,<span class="hljs-number">0.5f</span>,<span class="hljs-number">0.5f</span>));
+        <span class="hljs-comment">//        transform = glm::rotate(transform, glm::radians(1.0f),glm::vec3(0.0f,0.0f,1.0f));</span>
+        <span class="hljs-comment">//        transform = glm::scale(transform, glm::vec3(0.999f,0.999f,0.999f));</span>
+        <span class="hljs-comment">// 和着色器通讯</span>
+        <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> transformLoc = glGetUniformLocation(ourShader.Program, <span class="hljs-string">"transform"</span>);
+        glUniformMatrix4fv(transformLoc, <span class="hljs-number">1</span>, GL_FALSE, glm::value_ptr(transform));
+        
+        glBindVertexArray(VAO[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 绑定**</span>
+        glDrawElements(GL_TRIANGLES, <span class="hljs-number">6</span>, GL_UNSIGNED_INT, <span class="hljs-number">0</span>);
+        
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    &#125;
+    glDeleteVertexArrays(<span class="hljs-number">1</span>, &amp;VAO[<span class="hljs-number">0</span>]);
+    glDeleteBuffers(<span class="hljs-number">1</span>, &amp;VBO[<span class="hljs-number">0</span>]);
+    
+    glfwTerminate();
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre></p>
+<p>着色器类<code>shader.hpp</code><br><pre><code class="hljs undefined"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> once</span>
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;string&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;fstream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;sstream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;GL/glew.h&gt;</span></span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Shader</span> &#123;</span>
+    GLuint vertex, fragment;
+    
+<span class="hljs-keyword">public</span>:
+    GLuint Program;
+    Shader(<span class="hljs-keyword">const</span> GLchar *vertexPath, <span class="hljs-keyword">const</span> GLchar *fragmentPath) &#123;
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> vertexCode;
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> fragmentCode;
+        <span class="hljs-built_in">std</span>::ifstream vShaderFile;
+        <span class="hljs-built_in">std</span>::ifstream fShaderFile;
+        
+        vShaderFile.exceptions(<span class="hljs-built_in">std</span>::ifstream::badbit);
+        fShaderFile.exceptions(<span class="hljs-built_in">std</span>::ifstream::badbit);
+        
+        <span class="hljs-keyword">try</span> &#123;
+            vShaderFile.<span class="hljs-built_in">open</span>(vertexPath);
+            fShaderFile.<span class="hljs-built_in">open</span>(fragmentPath);
+            
+            
+            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">stringstream</span> vShaderStream, fShaderStream;
+            
+            
+            
+            vShaderStream &lt;&lt; vShaderFile.rdbuf();
+            fShaderStream &lt;&lt; fShaderFile.rdbuf();
+            
+            vertexCode = vShaderStream.str();
+            fragmentCode = fShaderStream.str();
+            
+        &#125;
+        <span class="hljs-keyword">catch</span> (<span class="hljs-built_in">std</span>::ifstream::failure e) &#123;
+            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"ERROR:SHADER::FILE_NOT_SUCCESSFULLY_READ"</span> &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+        &#125;
+        
+        
+        
+        <span class="hljs-comment">//进行格式转换</span>
+        <span class="hljs-keyword">const</span> GLchar *vShaderCode = vertexCode.c_str();
+        <span class="hljs-keyword">const</span> GLchar *fShaderCode = fragmentCode.c_str();
+        
+        <span class="hljs-comment">// import and compile the shader</span>
+        vertex = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vertex, <span class="hljs-number">1</span>, &amp;vShaderCode, <span class="hljs-literal">NULL</span>);	<span class="hljs-comment">// 加载字符串</span>
+        glCompileShader(vertex);	<span class="hljs-comment">// 编译</span>
+        
+        <span class="hljs-comment">// 检查是否编译成功</span>
+        GLint success;
+        GLchar infoLog[<span class="hljs-number">512</span>];
+        
+        glGetShaderiv(vertex, GL_COMPILE_STATUS, &amp;success);
+        <span class="hljs-keyword">if</span> (!success) &#123;
+            glGetShaderInfoLog(vertex, <span class="hljs-number">512</span>, <span class="hljs-literal">NULL</span>, infoLog);
+            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"</span> &lt;&lt; infoLog &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+        &#125;
+        
+        fragment = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fragment, <span class="hljs-number">1</span>, &amp;fShaderCode, <span class="hljs-literal">NULL</span>);	<span class="hljs-comment">// 加载字符串</span>
+        glCompileShader(fragment);	<span class="hljs-comment">// 编译</span>
+        
+        <span class="hljs-comment">// 检查是否编译成功</span>
+        glGetShaderiv(fragment, GL_COMPILE_STATUS, &amp;success);
+        <span class="hljs-keyword">if</span> (!success) &#123;
+            glGetShaderInfoLog(fragment, <span class="hljs-number">512</span>, <span class="hljs-literal">NULL</span>, infoLog);
+            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"</span> &lt;&lt; infoLog &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+        &#125;
+        
+        <span class="hljs-comment">// create program and link it</span>
+        <span class="hljs-keyword">this</span>-&gt;Program = glCreateProgram();
+        glAttachShader(<span class="hljs-keyword">this</span>-&gt;Program, vertex);	<span class="hljs-comment">// 把目标文件加入</span>
+        glAttachShader(<span class="hljs-keyword">this</span>-&gt;Program, fragment);
+        glLinkProgram(<span class="hljs-keyword">this</span>-&gt;Program);
+        
+        <span class="hljs-comment">// 检查链接是否错误</span>
+        glGetProgramiv(<span class="hljs-keyword">this</span>-&gt;Program, GL_LINK_STATUS, &amp;success);
+        <span class="hljs-keyword">if</span> (!success) &#123;
+            glGetProgramInfoLog(<span class="hljs-keyword">this</span>-&gt;Program, <span class="hljs-number">512</span>, <span class="hljs-literal">NULL</span>, infoLog);
+            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"ERROR::PROGRAM::FRAGMENT::LINK_FAILED\n"</span> &lt;&lt; infoLog &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+        &#125;
+        
+        <span class="hljs-comment">// validate</span>
+        
+        glValidateProgram(<span class="hljs-keyword">this</span>-&gt;Program);
+        glGetProgramiv(<span class="hljs-keyword">this</span>-&gt;Program, GL_VALIDATE_STATUS, &amp;success);
+        <span class="hljs-keyword">if</span> (!success) &#123;
+            glGetProgramInfoLog(<span class="hljs-keyword">this</span>-&gt;Program, <span class="hljs-number">512</span>, <span class="hljs-literal">NULL</span>, infoLog);
+            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"ERROR::SHADER::PROGRAM::VALIDATE\n"</span> &lt;&lt; infoLog &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+        &#125;
+        
+        
+    &#125;
+    ~Shader() &#123;
+        glDetachShader(<span class="hljs-keyword">this</span>-&gt;Program, vertex);
+        glDetachShader(<span class="hljs-keyword">this</span>-&gt;Program, fragment);
+        
+        glDeleteShader(vertex);
+        glDeleteShader(fragment);
+        
+        glDeleteProgram(<span class="hljs-keyword">this</span>-&gt;Program);
+    &#125;
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Use</span><span class="hljs-params">()</span> </span>&#123;
+        glUseProgram(<span class="hljs-keyword">this</span>-&gt;Program);
+    &#125;
+    
+&#125;;</code></pre></p>
+<p>顶点着色器<code>core.vs</code><br><pre><code class="hljs undefined"><span class="hljs-meta">#version 330 core</span>
+<span class="hljs-keyword">layout</span> (<span class="hljs-keyword">location</span> = <span class="hljs-number">0</span>) <span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> aPos;
+<span class="hljs-keyword">layout</span> (<span class="hljs-keyword">location</span> = <span class="hljs-number">1</span>) <span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> aColor;
+<span class="hljs-keyword">out</span> <span class="hljs-type">vec3</span> ourColor;
+<span class="hljs-keyword">uniform</span> <span class="hljs-type">mat4</span> transform;
+<span class="hljs-type">void</span> main()
+&#123;
+    <span class="hljs-built_in">gl_Position</span> =  transform*<span class="hljs-type">vec4</span>(aPos, <span class="hljs-number">1.0</span>);
+    ourColor = aColor;
+&#125;</code></pre></p>
+<p>片段着色器<code>core.frag</code><br><pre><code class="hljs undefined"><span class="hljs-meta">#version 330 core</span>
+<span class="hljs-keyword">out</span> <span class="hljs-type">vec4</span> FragColor;
+<span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> ourColor;
+<span class="hljs-type">void</span> main()
+&#123;
+    FragColor = <span class="hljs-type">vec4</span>(ourColor,<span class="hljs-number">1.0</span>f);
+&#125;</code></pre></p>
+<p>其他头文件<code>glew.h glfw.h</code>等头文件可以google到相应的github页面下载。</p>
+<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p>运行以上代码你将看到的效果是：<br><img src="/2018/10/17/1-Learn-openGL-进入3D世界/1.0.gif" alt="gif"><br><small>围绕法向量(1.0f,1.0f,1.0f)旋转</small></p>
+<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="https://learnopengl-cn.github.io/01%20Getting%20started/09%20Camera/" target="_blank" rel="noopener">learning openGL中文教程</a>该教程翻译自<a href="https://learnopengl.com" target="_blank" rel="noopener">原英文教程</a>，整个教程讲解得详细而且专业，不但告诉你如何用代码实现，而且还会从原理剖析。原理讲解不僵硬，生动详细。稍微耐心的阅读教程的讲解，就能理解其中的每一个细节原理。让你知其然并且知其所以然，是一篇很好的教程。</p>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/random-yang">Github</a></li><li><a href="https://codepen.io/randomyang">Codepen</a></li><li><a href="https://dribbble.com/randomyang">Dribbble</a></li><li><a href="https://twitter.com/JHWviuDZH8bcvuM">Twitter</a></li><li><a href="mailto:decoderyang@gmail.com">Email</a></li><li><a href="/atom.xml">Rss</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Graphic/">Graphic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regex/">Regex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebGL/">WebGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blend-mode/">blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog主题/">blog主题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css3/">css3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/design/">design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/filter/">filter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/front-end/">front-end</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/glsl/">glsl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/interesting/">interesting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mix-blend-mode/">mix-blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openGL/">openGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/p5-js/">p5.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/parallax/">parallax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pixel/">pixel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg/">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webAudio/">webAudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/借鉴/">借鉴</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/像素/">像素</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/单位/">单位</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础/">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符画/">字符画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开发/">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/摘记/">摘记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/易混/">易混</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/正则表达式/">正则表达式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/浏览器/">浏览器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/深度学习/">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/视差滚动/">视差滚动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/计算机图形学/">计算机图形学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2018/10/19/2-Learn-openGL-基础光照/">(2)Learning openGL--基础光照</a><a class="next-button" href="/2018/07/07/p5-js简易实现-apple-watch-三色表盘/">p5.js简易实现 apple watch 三色表盘</a></div><div id="comments"></div></div></div></div><div class="footer"><span>©️2019-2020 Designed By&nbsp;<strong><a href="https://github.com/OfficialYoungX">RandomYang</a></strong> Powered By&nbsp;</span><strong><a href="https://hexo.io">hexo</a></strong></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>

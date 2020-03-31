@@ -1,0 +1,396 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="[译]使用Three.js制作有粘稠感的图像悬停效果 [ RandomYang ] "><meta name="theme-color" content="#ebc65a"><title>[译]使用Three.js制作有粘稠感的图像悬停效果 [ RandomYang ] </title><link rel="shortcut icon" href="https://source-hosting.oss-cn-shanghai.aliyuncs.com/randomyang-favicon.png"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-151544816-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-151544816-1');</script><script src="https://www.unpkg.com/valine/dist/Valine.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  new Valine({
+    el: '#comments',
+    appId: '1JY5EfOoNSaiEGcXhwrCs7dk-gzGzoHsz',
+    appKey: 'jXutXUNavOPDp92k9gQuMsv9',
+    notify: false,
+    verify: false,
+    avatar: 'mp',
+    placeholder: 'Say something...',
+  })
+})</script><script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><link rel="alternate" href="/atom.xml" title="RandomYang" type="application/atom+xml">
+</head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">RandomYang</a></h1><p>Code + Design =&gt; Magic</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">[译]使用Three.js制作有粘稠感的图像悬停效果</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href>[译]使用Three.js制作有粘稠感的图像悬停效果</a></h2><span class="post__date">2019-11-02</span><a href="/tags/Graphic/"><span class="post__tags">#Graphic</span></a><a href="/tags/glsl/"><span class="post__tags">#glsl</span></a><a href="/tags/WebGL/"><span class="post__tags">#WebGL</span></a></div></div><div class="article__content"><h1 id="译-使用Three-js制作有粘稠感的图像悬停效果"><a href="#译-使用Three-js制作有粘稠感的图像悬停效果" class="headerlink" title="[译]使用Three.js制作有粘稠感的图像悬停效果"></a>[译]使用Three.js制作有粘稠感的图像悬停效果</h1><blockquote>
+<p>原文链接：<a href="https://tympanus.net/codrops/2019/10/23/making-gooey-image-hover-effects-with-three-js/" target="_blank" rel="noopener">https://tympanus.net/codrops/2019/10/23/making-gooey-image-hover-effects-with-three-js/</a></p>
+</blockquote>
+<p><strong>学习如何使用噪声在着色器中创建粘稠的悬停效果。</strong></p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/ThumbnailGooeyHoverEffect.jpg" alt="ThumbnailGooeyHoverEffect"></p>
+<p><a href="https://tympanus.net/Tutorials/GooeyImageHoverEffects/" target="_blank" rel="noopener">查看在线演示</a>or<a href="https://github.com/Aqro/gooey-hover-codrops" target="_blank" rel="noopener">下载源码</a></p>
+<p>作为Flash的替代者WebGL在近几年随着像Three.js, PIXI.js, OGL.js这样的库而变得越来越火。它们对于创建<em>空白板</em>非常有用，唯一的限制只有你的想象力。我们看到越来越多的WebGL创建的效果微妙地集成到交互界面中，以进行悬停，滚动或显示效果。比如 <a href="https://www.hellomonday.com/" target="_blank" rel="noopener">Hello Monday</a> 或者是 <a href="https://www.cobosrl.co/" target="_blank" rel="noopener">cobosrl.co</a>.</p>
+<p>在本教程中，我们将使用Three.js创建特殊的粘稠纹理，将其用于在悬停时显示另一幅图像。你现在就可以点击演示链接，去看看真实的效果！对于演示本身，我创建了一个更实际的示例，该示例显示了带有图像的水平可滚动布局，其中每个图像都有不同的效果。你可以单击图像，它将变换为更大的版本，同时显示一些其他内容（Mock出的内容）。我们将会带你了解这个效果最有趣的部分，这样你就可以知道它是如何工作的，并且可以自己创建更多的效果！</p>
+<p>我假设你对Javascript, Three.js以及着色器有一定的了解。如果你不了解，那么你可以先看看 <a href="https://threejs.org/docs/" target="_blank" rel="noopener">Three.js documentation</a>, <a href="https://thebookofshaders.com/" target="_blank" rel="noopener">The Book of Shaders</a>, <a href="https://threejsfundamentals.org/" target="_blank" rel="noopener">Three.js Fundamentals</a> 或者 <a href="https://discoverthreejs.com/book/contents/" target="_blank" rel="noopener">Discover Three.js</a>.</p>
+<blockquote>
+<p><strong>注意:</strong>本教程涵盖了许多部分。如果愿意，可以跳过HTML / CSS / JavaScript部分，直接转到着色器部分。</p>
+</blockquote>
+<h2 id="在-DOM-中创建场景-scene"><a href="#在-DOM-中创建场景-scene" class="headerlink" title="在 DOM 中创建场景(scene)"></a>在 DOM 中创建场景(scene)</h2><p>在我们创建有趣的东西之前，需要在HTML中插入图片。在HTML / CSS中设置初始位置和尺寸，比在JavaScript中定位所有内容更容易处理场景大小。此外，样式部分应该只在CSS中定义，而不要在Javascript中。例如，如果我们的图片在桌面端的比例为16：9，而在移动设备上的比例为4：3，我们只应该使用CSS来处理。 JavaScript将仅用于请求更新数据。</p>
+<pre><code class="hljs html">// index.html
+
+<span class="hljs-tag">&lt;<span class="hljs-name">section</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"container"</span>&gt;</span>
+	<span class="hljs-tag">&lt;<span class="hljs-name">article</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"tile"</span>&gt;</span>
+		<span class="hljs-tag">&lt;<span class="hljs-name">figure</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"tile__figure"</span>&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">"path/to/my/image.jpg"</span> <span class="hljs-attr">data-hover</span>=<span class="hljs-string">"path/to/my/hover-image.jpg"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"tile__image"</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">"My image"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"400"</span> <span class="hljs-attr">height</span>=<span class="hljs-string">"300"</span> /&gt;</span>
+		<span class="hljs-tag">&lt;/<span class="hljs-name">figure</span>&gt;</span>
+	<span class="hljs-tag">&lt;/<span class="hljs-name">article</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">canvas</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"stage"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span></code></pre>
+<pre><code class="hljs css">// style.css
+
+.container &#123;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100vh;
+	z-index: 10;
+&#125;
+
+.tile &#123;
+	width: 35vw;
+	flex: 0 0 auto;
+&#125;
+
+.tile__image &#123;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+&#125;
+
+canvas &#123;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100vh;
+	z-index: 9;
+&#125;</code></pre>
+<p>正如你在上面看到的，我们已经创建了一个位于在屏幕居中的图像。稍后我们将利用data-src和data-hover属性，通过延迟加载在脚本中加载这两个图像。</p>
+<p><a href="https://codesandbox.io/embed/step-00-xhkcr" target="_blank" rel="noopener"><img src="https://codesandbox.io/static/img/play-codesandbox.svg" alt="标签用法"></a></p>
+<h2 id="在-JavaScript-中创建场景-scene"><a href="#在-JavaScript-中创建场景-scene" class="headerlink" title="在 JavaScript 中创建场景(scene)"></a>在 JavaScript 中创建场景(scene)</h2><p>让我们从不那么容易但也不算难的部分开始吧！首先，我们将创建场景，灯光和渲染器。</p>
+<pre><code class="hljs js"><span class="hljs-comment">// Scene.js</span>
+
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> THREE <span class="hljs-keyword">from</span> <span class="hljs-string">'three'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Scene</span> </span>&#123;
+	<span class="hljs-keyword">constructor</span>() &#123;
+		<span class="hljs-keyword">this</span>.container = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'stage'</span>)
+
+		<span class="hljs-keyword">this</span>.scene = <span class="hljs-keyword">new</span> THREE.Scene()
+		<span class="hljs-keyword">this</span>.renderer = <span class="hljs-keyword">new</span> THREE.WebGLRenderer(&#123;
+			<span class="hljs-attr">canvas</span>: <span class="hljs-keyword">this</span>.container,
+			<span class="hljs-attr">alpha</span>: <span class="hljs-literal">true</span>,
+	  &#125;)
+
+		<span class="hljs-keyword">this</span>.renderer.setSize(<span class="hljs-built_in">window</span>.innerWidth, <span class="hljs-built_in">window</span>.innerHeight)
+		<span class="hljs-keyword">this</span>.renderer.setPixelRatio(<span class="hljs-built_in">window</span>.devicePixelRatio)
+
+		<span class="hljs-keyword">this</span>.initLights()
+	&#125;
+
+	initLights() &#123;
+		<span class="hljs-keyword">const</span> ambientlight = <span class="hljs-keyword">new</span> THREE.AmbientLight(<span class="hljs-number">0xffffff</span>, <span class="hljs-number">2</span>)
+		<span class="hljs-keyword">this</span>.scene.add(ambientlight)
+	&#125;
+&#125;</code></pre>
+<p>这是一个非常基本的场景。但是我们在场景中还需要一个基本的元素：相机。我们有两种可以供选择的相机：正射或透视。如果我们想让图片保持形状不变，我们可以选择第一种。但是对于旋转效果，我们希望在移动鼠标时具有一定的透视效果。</p>
+<p>在带有透视相机的Three.js（或者其他用于WebGL的库）中，屏幕上的10个单位值并不等于10px。因此，这里的技巧是使用一些数学运算将1单位转换为1px，并更改视角以增加或减少失真效果。</p>
+<pre><code class="hljs js"><span class="hljs-comment">// Scene.js</span>
+
+<span class="hljs-keyword">const</span> perspective = <span class="hljs-number">800</span>
+
+<span class="hljs-keyword">constructor</span>() &#123;
+	<span class="hljs-comment">// ...</span>
+	<span class="hljs-keyword">this</span>.initCamera()
+&#125;
+
+initCamera() &#123;
+	<span class="hljs-keyword">const</span> fov = (<span class="hljs-number">180</span> * (<span class="hljs-number">2</span> * <span class="hljs-built_in">Math</span>.atan(<span class="hljs-built_in">window</span>.innerHeight / <span class="hljs-number">2</span> / perspective))) / <span class="hljs-built_in">Math</span>.PI
+
+	<span class="hljs-keyword">this</span>.camera = <span class="hljs-keyword">new</span> THREE.PerspectiveCamera(fov, <span class="hljs-built_in">window</span>.innerWidth / <span class="hljs-built_in">window</span>.innerHeight, <span class="hljs-number">1</span>, <span class="hljs-number">1000</span>)
+	<span class="hljs-keyword">this</span>.camera.position.set(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, perspective)
+&#125;</code></pre>
+<p>我们将透视值设置为800，以便在旋转平面时不会产生太大的变形。我们增加的视角越大，我们对扭曲的感知就越少，反之亦然。然后，我们需要做的最后一件事是在每一帧中渲染场景。</p>
+<pre><code class="hljs js"><span class="hljs-comment">// Scene.js</span>
+
+<span class="hljs-keyword">constructor</span>() &#123;
+	<span class="hljs-comment">// ...</span>
+	<span class="hljs-keyword">this</span>.update()
+&#125;
+
+update() &#123;
+	requestAnimationFrame(<span class="hljs-keyword">this</span>.update.bind(<span class="hljs-keyword">this</span>))
+	
+	<span class="hljs-keyword">this</span>.renderer.render(<span class="hljs-keyword">this</span>.scene, <span class="hljs-keyword">this</span>.camera)
+&#125;</code></pre>
+<p>如果你的屏幕不是黑色的，则说明方法正确！</p>
+<h2 id="用正确的尺寸创建平面"><a href="#用正确的尺寸创建平面" class="headerlink" title="用正确的尺寸创建平面"></a>用正确的尺寸创建平面</h2><p>如上所述，我们必须从DOM中的图像上检索一些其他信息，例如其尺寸和在页面上的位置。</p>
+<pre><code class="hljs js"><span class="hljs-comment">// Scene.js</span>
+
+<span class="hljs-keyword">import</span> Figure <span class="hljs-keyword">from</span> <span class="hljs-string">'./Figure'</span>
+
+<span class="hljs-keyword">constructor</span>() &#123;
+	<span class="hljs-comment">// ...</span>
+	<span class="hljs-keyword">this</span>.figure = <span class="hljs-keyword">new</span> Figure(<span class="hljs-keyword">this</span>.scene)
+&#125;</code></pre>
+<pre><code class="hljs js"><span class="hljs-comment">// Figure.js</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Figure</span> </span>&#123;
+	<span class="hljs-keyword">constructor</span>(scene) &#123;
+		<span class="hljs-keyword">this</span>.$image = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'.tile__image'</span>)
+		<span class="hljs-keyword">this</span>.scene = scene
+
+		<span class="hljs-keyword">this</span>.loader = <span class="hljs-keyword">new</span> THREE.TextureLoader()
+
+		<span class="hljs-keyword">this</span>.image = <span class="hljs-keyword">this</span>.loader.load(<span class="hljs-keyword">this</span>.$image.dataset.src)
+		<span class="hljs-keyword">this</span>.hoverImage = <span class="hljs-keyword">this</span>.loader.load(<span class="hljs-keyword">this</span>.$image.dataset.hover)
+		<span class="hljs-keyword">this</span>.sizes = <span class="hljs-keyword">new</span> THREE.Vector2(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>)
+		<span class="hljs-keyword">this</span>.offset = <span class="hljs-keyword">new</span> THREE.Vector2(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>)
+
+		<span class="hljs-keyword">this</span>.getSizes()
+
+		<span class="hljs-keyword">this</span>.createMesh()
+	&#125;
+&#125;</code></pre>
+<p>首先，我们创建另一个类，将场景作为属性传递给该类。我们设置了两个新的矢量，尺寸和偏移，用于存储DOM图像的尺寸和位置。</p>
+<p>此外，我们将使用TextureLoader来“加载”图像并将其转换为纹理。我们需要这样做，因为我们想在着色器中使用这些图片。</p>
+<p>我们需要在类中创建一个方法来处理图像的加载并等待回调。我们可以使用异步功能来实现这一目标，但对于本教程而言，我们将其保持简单。请记住，您可能需要出于自身目的对它进行一些重构。</p>
+<pre><code class="hljs js"><span class="hljs-comment">// Figure.js</span>
+
+<span class="hljs-comment">// ...</span>
+	getSizes() &#123;
+		<span class="hljs-keyword">const</span> &#123; width, height, top, left &#125; = <span class="hljs-keyword">this</span>.$image.getBoundingClientRect()
+
+		<span class="hljs-keyword">this</span>.sizes.set(width, height)
+		<span class="hljs-keyword">this</span>.offset.set(left - <span class="hljs-built_in">window</span>.innerWidth / <span class="hljs-number">2</span> + width / <span class="hljs-number">2</span>, -(top - <span class="hljs-built_in">window</span>.innerHeight / <span class="hljs-number">2</span> + height / <span class="hljs-number">2</span>))
+	&#125;
+<span class="hljs-comment">// ...</span></code></pre>
+<p>我们在getBoundingClientRect对象中获取图像信息。然后，将它们传递给两个变量。这里的偏移量用于计算屏幕中心与页面上的对象之间的距离。(译者：可以补充解释)</p>
+<pre><code class="hljs js"><span class="hljs-comment">// Figure.js</span>
+
+<span class="hljs-comment">// ...</span>
+	createMesh() &#123;
+		<span class="hljs-keyword">this</span>.geometry = <span class="hljs-keyword">new</span> THREE.PlaneBufferGeometry(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>)
+		<span class="hljs-keyword">this</span>.material = <span class="hljs-keyword">new</span> THREE.MeshBasicMaterial(&#123;
+			<span class="hljs-attr">map</span>: <span class="hljs-keyword">this</span>.image
+		&#125;)
+
+		<span class="hljs-keyword">this</span>.mesh = <span class="hljs-keyword">new</span> THREE.Mesh(<span class="hljs-keyword">this</span>.geometry, <span class="hljs-keyword">this</span>.material)
+
+		<span class="hljs-keyword">this</span>.mesh.position.set(<span class="hljs-keyword">this</span>.offset.x, <span class="hljs-keyword">this</span>.offset.y, <span class="hljs-number">0</span>)
+		<span class="hljs-keyword">this</span>.mesh.scale.set(<span class="hljs-keyword">this</span>.sizes.x, <span class="hljs-keyword">this</span>.sizes.y, <span class="hljs-number">1</span>)
+
+		<span class="hljs-keyword">this</span>.scene.add(<span class="hljs-keyword">this</span>.mesh)
+	&#125;
+<span class="hljs-comment">// ...</span></code></pre>
+<p>之后，我们将在平面上设置值。如您所见，我们在1px上创建了一个平面，该平面上有1行1列。由于我们<em>不想</em>使平面变形，所以我们不需要很多面或顶点。因此，让我们保持简单。</p>
+<p>既然我们可以直接设置网格的大小，为什么要用缩放的方式来实现？</p>
+<p>其实这么做主要是为了更加便于调整网格的大小。如果我们之后要更改网格的大小，除了用scale没有什么更好的方法。虽然更改网格的比例更容易直接实现，但是用来调整尺寸并不太方便。（译者：作者这里其实是一个很巧妙的做法：直接将原来的大小设置为1x1，然后采用缩放API来让网格变换为实际大小，这样缩放的比例也就等于实际的长宽值）</p>
+<p>目前，我们设置了MeshBasicMaterial，看来一切正常。</p>
+<h2 id="获取鼠标坐标"><a href="#获取鼠标坐标" class="headerlink" title="获取鼠标坐标"></a>获取鼠标坐标</h2><p>现在，我们已经使用网格构建了场景，我们想要获取鼠标坐标，并且为了使事情变得简单，我们将其<strong>归一化</strong>。为什么要归一化？看看着色器的坐标系统你就明白了。</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/coordinate-system.jpg" alt></p>
+<p>如上图所示，我们已经将两个着色器的值标准化了。为简单起见，我们将转化鼠标坐标以匹配顶点着色器坐标。</p>
+<p>如果你在这里觉得理解有困难, 我建议你去看一看 <a href="https://thebookofshaders.com/" target="_blank" rel="noopener">Book of Shaders</a> 和 <a href="https://threejsfundamentals.org/" target="_blank" rel="noopener">Three.js Fundamentals</a>的各个章节。 两者都有很好的建议，并提供了许多示例来帮助你理解。</p>
+<pre><code class="hljs js"><span class="hljs-comment">// Figure.js</span>
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">this</span>.mouse = <span class="hljs-keyword">new</span> THREE.Vector2(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>)
+<span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">'mousemove'</span>, (ev) =&gt; &#123; <span class="hljs-keyword">this</span>.onMouseMove(ev) &#125;)
+
+<span class="hljs-comment">// ...</span>
+
+onMouseMove(event) &#123;
+	TweenMax.to(<span class="hljs-keyword">this</span>.mouse, <span class="hljs-number">0.5</span>, &#123;
+		<span class="hljs-attr">x</span>: (event.clientX / <span class="hljs-built_in">window</span>.innerWidth) * <span class="hljs-number">2</span> - <span class="hljs-number">1</span>,
+		<span class="hljs-attr">y</span>: -(event.clientY / <span class="hljs-built_in">window</span>.innerHeight) * <span class="hljs-number">2</span> + <span class="hljs-number">1</span>,
+	&#125;)
+
+	TweenMax.to(<span class="hljs-keyword">this</span>.mesh.rotation, <span class="hljs-number">0.5</span>, &#123;
+		<span class="hljs-attr">x</span>: -<span class="hljs-keyword">this</span>.mouse.y * <span class="hljs-number">0.3</span>,
+		<span class="hljs-attr">y</span>: <span class="hljs-keyword">this</span>.mouse.x * (<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">6</span>)
+	&#125;)
+&#125;</code></pre>
+<p>对于补间部分，我将使用GreenSock的TweenMax。这是有史以来最好的库。而且非常适合我们想要达到的目的。我们不需要处理两个状态之间的转换，TweenMax会为我们完成。每次移动鼠标时，TweenMax都会平滑更新位置坐标和旋转角度。</p>
+<p><a href="https://codesandbox.io/s/step-01-uozmf?from-embed" target="_blank" rel="noopener"><img src="https://codesandbox.io/static/img/play-codesandbox.svg" alt="标签用法"></a></p>
+<p>在进行后面的步骤之前还有一件事：我们将材质从MeshBasicMaterial更新为ShaderMaterial，并传递一些值（均匀值）和着色器代码。</p>
+<pre><code class="hljs js"><span class="hljs-comment">// Figure.js</span>
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">this</span>.uniforms = &#123;
+	<span class="hljs-attr">u_image</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'t'</span>, <span class="hljs-attr">value</span>: <span class="hljs-keyword">this</span>.image &#125;,
+	<span class="hljs-attr">u_imagehover</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'t'</span>, <span class="hljs-attr">value</span>: <span class="hljs-keyword">this</span>.hover &#125;,
+	<span class="hljs-attr">u_mouse</span>: &#123; <span class="hljs-attr">value</span>: <span class="hljs-keyword">this</span>.mouse &#125;,
+	<span class="hljs-attr">u_time</span>: &#123; <span class="hljs-attr">value</span>: <span class="hljs-number">0</span> &#125;,
+	<span class="hljs-attr">u_res</span>: &#123; <span class="hljs-attr">value</span>: <span class="hljs-keyword">new</span> THREE.Vector2(<span class="hljs-built_in">window</span>.innerWidth, <span class="hljs-built_in">window</span>.innerHeight) &#125;
+&#125;
+
+<span class="hljs-keyword">this</span>.material = <span class="hljs-keyword">new</span> THREE.ShaderMaterial(&#123;
+	<span class="hljs-attr">uniforms</span>: <span class="hljs-keyword">this</span>.uniforms,
+	<span class="hljs-attr">vertexShader</span>: vertexShader,
+	<span class="hljs-attr">fragmentShader</span>: fragmentShader
+&#125;)
+
+update() &#123;
+	<span class="hljs-keyword">this</span>.uniforms.u_time.value += <span class="hljs-number">0.01</span>
+&#125;</code></pre>
+<p>我们传递了两个纹理，以及鼠标的位置，屏幕的大小和一个名为<code>u_time</code>的变量，该变量将在每一帧进行递增。</p>
+<p>但是请记住，这不是最好的方法。我们只需要当我们将鼠标悬停在图形上时增加，而不必在每一帧上增加。出于性能，最好仅在需要时更新着色器。</p>
+<h2 id="技巧背后的原理及如何使用噪声"><a href="#技巧背后的原理及如何使用噪声" class="headerlink" title="技巧背后的原理及如何使用噪声"></a>技巧背后的原理及如何使用噪声</h2><p>我不会解释什么是噪声以及噪声的来源。如果你有兴趣，请探究《 The Shader of Shaders》中的<a href="https://thebookofshaders.com/11/" target="_blank" rel="noopener">相关章节</a>，它进行了很好的解释。</p>
+<p>长话短说，噪声是一个函数，它根据传递的值为我们提供介于-1和1之间的值。它将输出随机但却又相关的值。</p>
+<p>多亏了噪声，我们才能生成许多不同的形状，例如地图，随机图案等。</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/noise-example1-e1570735927299.jpg" alt><br><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/noise-example2-e1570735958909.jpg" alt></p>
+<p>让我们从2D噪声开始。仅通过传递纹理的坐标，我们就可以得到类似云的纹理。</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/noise-result1.jpg" alt></p>
+<p>但事实上有好几种噪声函数。我们使用3D噪声，再给一个参数，例如…时间？噪声图形将随着时间的流逝而变化。通过更改频率和幅度，我们可以进行一些变化并增加对比度。</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/noise-result2.jpg" alt></p>
+<p>其次，我们将创建一个圆。在片段着色器中构建像圆形这样的简单形状非常容易。我们只是采用了《 The Shader of Shaders：Shapes》中的功能来创建一个模糊的圆，增加对比度和视觉效果！</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/noise-result3.jpg" alt></p>
+<p>最后，我们将这两个加在一起，使用一些变量，让它对纹理进行“切片”：</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/noise-result4-e1570736096227.jpg" alt></p>
+<p>这个混合之后的结果是不是很让人兴奋，让我们深入到代码层面继续探究！</p>
+<h2 id="着色器"><a href="#着色器" class="headerlink" title="着色器"></a>着色器</h2><p>我们这里确实不需要顶点着色器，这是我们的代码：</p>
+<pre><code class="hljs glsl"> <span class="hljs-comment">// vertexShader.glsl</span>
+<span class="hljs-keyword">varying</span> <span class="hljs-type">vec2</span> v_uv;
+
+<span class="hljs-type">void</span> main() &#123;
+	v_uv = uv;
+
+	<span class="hljs-built_in">gl_Position</span> = projectionMatrix * modelViewMatrix * <span class="hljs-type">vec4</span>(position, <span class="hljs-number">1.0</span>);
+&#125;</code></pre>
+<p>Three.js的ShaderMaterial提供了一些有用的默认变量，便于初学者使用：</p>
+<ul>
+<li>位置（vec3）：网格每个顶点的坐标</li>
+<li>uv（vec2）：纹理的坐标</li>
+<li>法线（vec3）：网格中每个顶点的法线。</li>
+</ul>
+<p>在这里，我们只是将UV坐标从顶点着色器传递到片段着色器。</p>
+<h2 id="创建圆形"><a href="#创建圆形" class="headerlink" title="创建圆形"></a>创建圆形</h2><p>让我们使用 <a href="https://thebookofshaders.com/07/" target="_blank" rel="noopener">The Book of Shaders</a>中的函数来构建圆并添加一个变量来控制边缘的模糊性。</p>
+<p>此外，我们将用鼠标位置来同步圆心坐标。这样，只要我们将鼠标移到图像上，圆就会跟随鼠标移动。</p>
+<pre><code class="hljs glsl"><span class="hljs-comment">// fragmentShader.glsl</span>
+<span class="hljs-keyword">uniform</span> <span class="hljs-type">vec2</span> u_mouse;
+<span class="hljs-keyword">uniform</span> <span class="hljs-type">vec2</span> u_res;
+
+<span class="hljs-type">float</span> circle(<span class="hljs-keyword">in</span> <span class="hljs-type">vec2</span> _st, <span class="hljs-keyword">in</span> <span class="hljs-type">float</span> _radius, <span class="hljs-keyword">in</span> <span class="hljs-type">float</span> blurriness)&#123;
+	<span class="hljs-type">vec2</span> dist = _st;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">1.</span>-<span class="hljs-built_in">smoothstep</span>(_radius-(_radius*blurriness), _radius+(_radius*blurriness), <span class="hljs-built_in">dot</span>(dist,dist)*<span class="hljs-number">4.0</span>);
+&#125;
+
+<span class="hljs-type">void</span> main() &#123;
+	<span class="hljs-type">vec2</span> st = <span class="hljs-built_in">gl_FragCoord</span>.xy / u_res.xy - <span class="hljs-type">vec2</span>(<span class="hljs-number">1.</span>);
+	<span class="hljs-comment">// tip: use the following formula to keep the good ratio of your coordinates</span>
+	st.y *= u_res.y / u_res.x;
+
+	<span class="hljs-type">vec2</span> mouse = u_mouse;
+	<span class="hljs-comment">// tip2: do the same for your mouse</span>
+	mouse.y *= u_res.y / u_res.x;
+	mouse *= <span class="hljs-number">-1.</span>;
+	
+	<span class="hljs-type">vec2</span> circlePos = st + mouse;
+	<span class="hljs-type">float</span> c = circle(circlePos, <span class="hljs-number">.03</span>, <span class="hljs-number">2.</span>);
+
+	<span class="hljs-built_in">gl_FragColor</span> = <span class="hljs-type">vec4</span>(<span class="hljs-type">vec3</span>(c), <span class="hljs-number">1.</span>);
+&#125;</code></pre>
+<p><a href="https://codesandbox.io/embed/step-02-engiv" target="_blank" rel="noopener"><img src="https://codesandbox.io/static/img/play-codesandbox.svg" alt="标签用法"></a></p>
+<h2 id="创建一些噪噪噪噪声声声～～"><a href="#创建一些噪噪噪噪声声声～～" class="headerlink" title="创建一些噪噪噪噪声声声～～"></a>创建一些噪噪噪噪声声声～～</h2><p>正如我们在上面看到的，噪声函数具有多个参数，并为我们生成了逼真的云图案。那么我们是如何得到的呢？</p>
+<p>对于这一部分，我将使用<a href="https://www.npmjs.com/package/glslify" target="_blank" rel="noopener">glslify</a>和<a href="https://www.npmjs.com/package/glsl-noise" target="_blank" rel="noopener">glsl-noise</a>，以及两个npm包来包含其他功能。它使我们的着色器更具可读性，并且隐藏了很多我们根本不会使用的显示函数。</p>
+<pre><code class="hljs glsl"><span class="hljs-comment">// fragmentShader.glsl</span>
+<span class="hljs-meta">#pragma glslify: snoise2 = require('glsl-noise/simplex/2d')</span>
+
+<span class="hljs-comment">//...</span>
+
+<span class="hljs-keyword">varying</span> <span class="hljs-type">vec2</span> v_uv;
+
+<span class="hljs-keyword">uniform</span> <span class="hljs-type">float</span> u_time;
+
+<span class="hljs-type">void</span> main() &#123;
+	<span class="hljs-comment">// ...</span>
+
+	<span class="hljs-type">float</span> n = snoise2(<span class="hljs-type">vec2</span>(v_uv.x, v_uv.y));
+
+	<span class="hljs-built_in">gl_FragColor</span> = <span class="hljs-type">vec4</span>(<span class="hljs-type">vec3</span>(n), <span class="hljs-number">1.</span>);
+&#125;</code></pre>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/noise-result5.jpg" alt></p>
+<p>通过更改噪声的幅度和频率（比如于sin / cos函数），我们可以更改渲染。</p>
+<pre><code class="hljs glsl"><span class="hljs-comment">// fragmentShader.glsl</span>
+
+<span class="hljs-type">float</span> offx = v_uv.x + <span class="hljs-built_in">sin</span>(v_uv.y + u_time * <span class="hljs-number">.1</span>);
+<span class="hljs-type">float</span> offy = v_uv.y - u_time * <span class="hljs-number">0.1</span> - <span class="hljs-built_in">cos</span>(u_time * <span class="hljs-number">.001</span>) * <span class="hljs-number">.01</span>;
+
+<span class="hljs-type">float</span> n = snoise2(<span class="hljs-type">vec2</span>(offx, offy) * <span class="hljs-number">5.</span>) * <span class="hljs-number">1.</span>;</code></pre>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/noise-result6.jpg" alt></p>
+<p>但这并时间的函数！它失真了，我们想要出色的效果。因此，我们将改为使用noise3d并传递第三个参数：时间。</p>
+<pre><code class="hljs glsl"><span class="hljs-type">float</span> n = snoise3(<span class="hljs-type">vec3</span>(offx, offy, u_time * <span class="hljs-number">.1</span>) * <span class="hljs-number">4.</span>) * <span class="hljs-number">.5</span>;</code></pre>
+<h2 id="合并纹理"><a href="#合并纹理" class="headerlink" title="合并纹理"></a>合并纹理</h2><p>只要将它们叠加在一起，我们就可以看到随时间变化的有趣的形状。</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/noise-result7.jpg" alt></p>
+<p>为了解释其背后的原理，让我们假设噪声就像是在-1和1之间浮动的值。但是我们的屏幕无法显示负值或大于1（纯白色）的像素，因此我们只能看到0到1之间的值。</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/explanation-noise1.jpg" alt></p>
+<p>我们的圆形则像这样：</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/explanation-noise2.jpg" alt></p>
+<p>相加之后的近似结果：</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/explanation-noise3.jpg" alt></p>
+<p>我们非常白的像素是可见光谱之外的像素。</p>
+<p>如果我们减小噪声并减去少量噪声，它将逐渐沿波浪向下移动，直到其消失在可见颜色的范围之内。</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/noise-result8.jpg" alt></p>
+<pre><code class="hljs glsl"><span class="hljs-type">float</span> n = snoise(<span class="hljs-type">vec3</span>(offx, offy, u_time * <span class="hljs-number">.1</span>) * <span class="hljs-number">4.</span>) - <span class="hljs-number">1.</span>;</code></pre>
+<p>我们的圆形仍然存在，只是可见度比较低。如果我们增加乘以它的值，它将形成更大的对比。</p>
+<pre><code class="hljs glsl"><span class="hljs-type">float</span> c = circle(circlePos, <span class="hljs-number">0.3</span>, <span class="hljs-number">0.3</span>) * <span class="hljs-number">2.5</span>;</code></pre>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/noise-result9.jpg" alt></p>
+<p>我们就实现我们最想要的效果了！但是正如你看到的，仍然缺少一些细节。而且我们的边缘一点也不锐利。</p>
+<p>为了解决这个问题，我们将使用 <a href="https://thebookofshaders.com/glossary/?search=smoothstep" target="_blank" rel="noopener">built-in smoothstep function</a>。</p>
+<pre><code class="hljs glsl"><span class="hljs-type">float</span> finalMask = <span class="hljs-built_in">smoothstep</span>(<span class="hljs-number">0.4</span>, <span class="hljs-number">0.5</span>, n + c);
+
+<span class="hljs-built_in">gl_FragColor</span> = <span class="hljs-type">vec4</span>(<span class="hljs-type">vec3</span>(finalMask), <span class="hljs-number">1.</span>);</code></pre>
+<p>借助此功能，我们将在0.4到0.5之间切出一部分图案。这些值之间的间隔越短，边缘越锐利。</p>
+<p><a href="https://codesandbox.io/embed/step-03-xpfc8" target="_blank" rel="noopener"><img src="https://codesandbox.io/static/img/play-codesandbox.svg" alt="标签用法"></a></p>
+<p>最后，我们可以将混合两个纹理用作遮罩。</p>
+<pre><code class="hljs glsl"><span class="hljs-keyword">uniform</span> <span class="hljs-type">sampler2D</span> u_image;
+<span class="hljs-keyword">uniform</span> <span class="hljs-type">sampler2D</span> u_imagehover;
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-type">vec4</span> image = <span class="hljs-built_in">texture2D</span>(u_image, uv);
+<span class="hljs-type">vec4</span> hover = <span class="hljs-built_in">texture2D</span>(u_imagehover, uv);
+
+<span class="hljs-type">vec4</span> finalImage = <span class="hljs-built_in">mix</span>(image, hover, finalMask);
+
+<span class="hljs-built_in">gl_FragColor</span> = finalImage;</code></pre>
+<p>我们可以更改一些变量以产生更强的粘稠效果：</p>
+<pre><code class="hljs glsl"><span class="hljs-comment">// ...</span>
+
+<span class="hljs-type">float</span> c = circle(circlePos, <span class="hljs-number">0.3</span>, <span class="hljs-number">2.</span>) * <span class="hljs-number">2.5</span>;
+
+<span class="hljs-type">float</span> n = snoise3(<span class="hljs-type">vec3</span>(offx, offy, u_time * <span class="hljs-number">.1</span>) * <span class="hljs-number">8.</span>) - <span class="hljs-number">1.</span>;
+
+<span class="hljs-type">float</span> finalMask = <span class="hljs-built_in">smoothstep</span>(<span class="hljs-number">0.4</span>, <span class="hljs-number">0.5</span>, n + <span class="hljs-built_in">pow</span>(c, <span class="hljs-number">2.</span>));
+
+<span class="hljs-comment">// ...</span></code></pre>
+<p><a href="https://codesandbox.io/embed/step-04-9gyz8" target="_blank" rel="noopener"><img src="https://codesandbox.io/static/img/play-codesandbox.svg" alt="标签用法"></a></p>
+<p>在这里可以找到<a href="https://github.com/Aqro/gooey-hover-codrops" target="_blank" rel="noopener">完整的源码</a></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>很高兴你能读到这。这篇教程并不完美，我可能忽略了一些细节，但是我希望你仍然喜欢本教程。基于此，你可以尽情的使用更多变量，尝试其他噪声函数，并尝试使用鼠标方向或滚动发挥你的想象力来实现其他效果！</p>
+<h2 id="参考以及感谢"><a href="#参考以及感谢" class="headerlink" title="参考以及感谢"></a>参考以及感谢</h2><ul>
+<li><a href="https://unsplash.com/" target="_blank" rel="noopener">Images from Unsplash</a></li>
+<li><a href="https://threejs.org/docs/" target="_blank" rel="noopener">Three.js</a></li>
+<li><a href="https://greensock.com/" target="_blank" rel="noopener">GSAP from GreenSock</a></li>
+<li><a href="https://idiotwu.github.io/smooth-scrollbar/" target="_blank" rel="noopener">Smooth Scrollbar</a></li>
+<li><a href="https://github.com/glslify/glslify" target="_blank" rel="noopener">glslify</a></li>
+<li><a href="https://www.npmjs.com/package/glsl-noise" target="_blank" rel="noopener">glsl-noise</a></li>
+</ul>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/article-tail@3x.png" alt="tail"></p>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/random-yang">Github</a></li><li><a href="https://codepen.io/randomyang">Codepen</a></li><li><a href="https://dribbble.com/randomyang">Dribbble</a></li><li><a href="https://twitter.com/JHWviuDZH8bcvuM">Twitter</a></li><li><a href="mailto:decoderyang@gmail.com">Email</a></li><li><a href="/atom.xml">Rss</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Graphic/">Graphic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regex/">Regex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebGL/">WebGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blend-mode/">blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog主题/">blog主题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css3/">css3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/design/">design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/filter/">filter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/front-end/">front-end</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/glsl/">glsl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/interesting/">interesting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mix-blend-mode/">mix-blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openGL/">openGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/p5-js/">p5.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/parallax/">parallax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pixel/">pixel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg/">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webAudio/">webAudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/借鉴/">借鉴</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/像素/">像素</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/单位/">单位</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础/">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符画/">字符画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开发/">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/摘记/">摘记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/易混/">易混</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/正则表达式/">正则表达式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/浏览器/">浏览器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/深度学习/">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/视差滚动/">视差滚动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/计算机图形学/">计算机图形学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2019/12/01/hexo博客主题「paper」的设计与开发/">hexo博客主题「paper」的设计与开发</a><a class="next-button" href="/2019/06/08/滚动视差-3D/">视差滚动-3D</a></div><div id="comments"></div></div></div></div><div class="footer"><span>©️2019-2020 Designed By&nbsp;<strong><a href="https://github.com/OfficialYoungX">RandomYang</a></strong> Powered By&nbsp;</span><strong><a href="https://hexo.io">hexo</a></strong></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>

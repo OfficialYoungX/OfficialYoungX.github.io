@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="hexo博客主题「paper」的设计与开发 [ RandomYang ] "><meta name="theme-color" content="#ebc65a"><title>hexo博客主题「paper」的设计与开发 [ RandomYang ] </title><link rel="shortcut icon" href="https://source-hosting.oss-cn-shanghai.aliyuncs.com/randomyang-favicon.png"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-151544816-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-151544816-1');</script><script src="https://www.unpkg.com/valine/dist/Valine.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  new Valine({
+    el: '#comments',
+    appId: '1JY5EfOoNSaiEGcXhwrCs7dk-gzGzoHsz',
+    appKey: 'jXutXUNavOPDp92k9gQuMsv9',
+    notify: false,
+    verify: false,
+    avatar: 'mp',
+    placeholder: 'Say something...',
+  })
+})</script><script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><link rel="alternate" href="/atom.xml" title="RandomYang" type="application/atom+xml">
+</head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">RandomYang</a></h1><p>Code + Design =&gt; Magic</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">hexo博客主题「paper」的设计与开发</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href>hexo博客主题「paper」的设计与开发</a></h2><span class="post__date">2019-12-01</span><a href="/tags/design/"><span class="post__tags">#design</span></a><a href="/tags/blog主题/"><span class="post__tags">#blog主题</span></a></div></div><div class="article__content"><p><img src="http://source-hosting.oss-cn-shanghai.aliyuncs.com/Paper-showcase.png" alt></p>
+<blockquote>
+<p><em>虽然麻烦，但是我还是写了个自己的博客主题叫<a href="https://github.com/OfficialYoungX/paper" target="_blank" rel="noopener">Paper</a></em></p>
+</blockquote>
+<p><a href="https://hexo.io/themes/" target="_blank" rel="noopener">hexo的theme</a>里面有接近300个主题，逛了一圈，似乎还是没有找到自己心仪的。看来看去，好像也就几个大的风格占了主要的比例。例如，Material Design、卡片布局、大图Landing，等等。</p>
+<p>这些风格似乎都是近几年比较流行的博客风格，但可能是因为用的人太多，我有点审美疲劳了。趁着自己好像有点设计能力，决定写一个自己的博客主题。</p>
+<p>这篇文章记录一下设计思想、设计过程、编码相关(其实这不是重点)。</p>
+<h3 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h3><p><strong>Q&amp;A</strong><br>Q：主题是什么风格？<br>A：paper-like，随便翻译一下可以翻译为“类纸化”风格。主要体现在排版以及一些线条的使用上。排版借鉴了报纸的排版风格。</p>
+<p>Q：具体参考了哪个报纸的排版设计？<br>A：我当时其实就是随便google了一张报纸，然后就开始设计了。链接我也给忘了，后面补上，长这样。<br><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/20191214174027.jpg" alt><br>其实现在想起来，我当时应该多参考几个，不过已经有点晚了，这一点比较后悔。</p>
+<p>其实除了借鉴真实报纸的排版以外，我还参考了另一个大名鼎鼎的设计站<a href="http://anyway.fm/" target="_blank" rel="noopener">Anyway</a>的设计，主要是其固定的边框设计(老实说我从未在其他任何网站见到过这种设计)、一宽一窄的边线设计。如果你喜欢了解设计相关的前沿信息，不妨访问Anyway设计站，他提供的信息质量都比较高。</p>
+<p>Q：使用什么设计工具？<br>A：当下比较流行的UI矢量绘图工具<a href="https://www.sketch.com" target="_blank" rel="noopener">sketch</a>。就是一个画UI比较方便的绘图工具。用什么工具不太重要，画出来像你想的那样就行了。</p>
+<p>Q：设计稿长什么样？<br>A：这样：<br><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/20191214182734.png" alt><br>最终的真实页面并非和设计稿长得完全一样，因为中途编码的过程中一些小的想法有变化。并且个人感觉，也没必要完全和设计稿一样，尤其是当设计师和开发人员是同一个人的时候。。。</p>
+<p><strong>排版</strong><br>如上所述，完全“模仿”和“魔改”的如图的报纸排版设计。作出好的排版实在是太难了，设计能力不够，所以就只有借鉴一下了。</p>
+<p><strong>字体</strong><br>字体又是一个大坑，我看上的好的字体都要收费。无奈之下只能暂时选择中规中矩的通用方案<code>font-family: &quot;SF Pro Text&quot;,&quot;SF Pro Icons&quot;,&quot;Helvetica Neue&quot;,&quot;Helvetica&quot;,&quot;Arial&quot;,sans-serif</code><br>行高上我还是下了一定的功夫，因为行高对于阅读体验的影响比较大。参考了这位<a href="https://canisminor.cc/blog/posts/20180820_canisminor" target="_blank" rel="noopener">大佬</a>博客上的行高算法，感觉最有道理，最能说服我。<br><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/20191214180635.png" alt><br>按照上图的计算，最后将字号和行高设定为stylu中的变量<br><pre><code class="hljs styl"><span class="hljs-comment">// font-size</span>
+<span class="hljs-variable">$font</span>-size-s-<span class="hljs-number">1</span> = <span class="hljs-number">1.4rem</span>
+<span class="hljs-variable">$font</span>-size-s-<span class="hljs-number">2</span> = <span class="hljs-number">1.6rem</span>
+<span class="hljs-variable">$font</span>-size-s-<span class="hljs-number">3</span> = <span class="hljs-number">1.8rem</span>
+
+<span class="hljs-variable">$font</span>-size-m-<span class="hljs-number">1</span> = <span class="hljs-number">2.2rem</span>
+<span class="hljs-variable">$font</span>-size-m-<span class="hljs-number">2</span> = <span class="hljs-number">2.8rem</span>
+<span class="hljs-variable">$font</span>-size-m-<span class="hljs-number">3</span> = <span class="hljs-number">3.4rem</span>
+<span class="hljs-variable">$font</span>-size-m-<span class="hljs-number">4</span> = <span class="hljs-number">4.2rem</span>
+
+<span class="hljs-variable">$font</span>-size-l-<span class="hljs-number">1</span> = <span class="hljs-number">5.2rem</span>
+<span class="hljs-variable">$font</span>-size-l-<span class="hljs-number">2</span> = <span class="hljs-number">6.4rem</span>
+<span class="hljs-variable">$font</span>-size-l-<span class="hljs-number">3</span> = <span class="hljs-number">7.8rem</span>
+
+<span class="hljs-comment">// line-height</span>
+<span class="hljs-variable">$line</span>-<span class="hljs-attribute">height</span>-s-<span class="hljs-number">1</span> = <span class="hljs-number">2.2rem</span>
+<span class="hljs-variable">$line</span>-<span class="hljs-attribute">height</span>-s-<span class="hljs-number">2</span> = <span class="hljs-number">2.4rem</span>
+<span class="hljs-variable">$line</span>-<span class="hljs-attribute">height</span>-s-<span class="hljs-number">3</span> = <span class="hljs-number">2.6rem</span>
+
+<span class="hljs-variable">$line</span>-<span class="hljs-attribute">height</span>-m-<span class="hljs-number">1</span> = <span class="hljs-number">3.0rem</span>
+<span class="hljs-variable">$line</span>-<span class="hljs-attribute">height</span>-m-<span class="hljs-number">2</span> = <span class="hljs-number">3.6rem</span>
+<span class="hljs-variable">$line</span>-<span class="hljs-attribute">height</span>-m-<span class="hljs-number">3</span> = <span class="hljs-number">4.4rem</span>
+<span class="hljs-variable">$line</span>-<span class="hljs-attribute">height</span>-m-<span class="hljs-number">4</span> = <span class="hljs-number">5.6rem</span>
+
+<span class="hljs-variable">$line</span>-<span class="hljs-attribute">height</span>-l-<span class="hljs-number">1</span> = <span class="hljs-number">6.6rem</span>
+<span class="hljs-variable">$line</span>-<span class="hljs-attribute">height</span>-l-<span class="hljs-number">2</span> = <span class="hljs-number">8.2rem</span>
+<span class="hljs-variable">$line</span>-<span class="hljs-attribute">height</span>-l-<span class="hljs-number">3</span> = <span class="hljs-number">10rem</span></code></pre></p>
+<p>再写一个stylu函数，在之后的样式中引用就好了：<br><pre><code class="hljs styl"><span class="hljs-function"><span class="hljs-title">text-size</span><span class="hljs-params">(n)</span></span>
+  <span class="hljs-keyword">if</span> n == <span class="hljs-string">'s-1'</span>
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-variable">$font</span>-size-s-<span class="hljs-number">1</span>
+    <span class="hljs-attribute">line-height</span>: <span class="hljs-variable">$line</span>-height-s-<span class="hljs-number">1</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> n == <span class="hljs-string">'s-2'</span>
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-variable">$font</span>-size-s-<span class="hljs-number">2</span>
+    <span class="hljs-attribute">line-height</span>: <span class="hljs-variable">$line</span>-height-s-<span class="hljs-number">2</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> n == <span class="hljs-string">'s-3'</span>
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-variable">$font</span>-size-s-<span class="hljs-number">3</span>
+    <span class="hljs-attribute">line-height</span>: <span class="hljs-variable">$line</span>-height-s-<span class="hljs-number">3</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> n == <span class="hljs-string">'m-1'</span>
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-variable">$font</span>-size-m-<span class="hljs-number">1</span>
+    <span class="hljs-attribute">line-height</span>: <span class="hljs-variable">$line</span>-height-m-<span class="hljs-number">1</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> n == <span class="hljs-string">'m-2'</span>
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-variable">$font</span>-size-m-<span class="hljs-number">2</span>
+    <span class="hljs-attribute">line-height</span>: <span class="hljs-variable">$line</span>-height-m-<span class="hljs-number">2</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> n == <span class="hljs-string">'m-3'</span>
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-variable">$font</span>-size-m-<span class="hljs-number">3</span>
+    <span class="hljs-attribute">line-height</span>: <span class="hljs-variable">$line</span>-height-m-<span class="hljs-number">3</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> n == <span class="hljs-string">'m-4'</span>
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-variable">$font</span>-size-m-<span class="hljs-number">4</span>
+    <span class="hljs-attribute">line-height</span>: <span class="hljs-variable">$line</span>-height-m-<span class="hljs-number">4</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> n == <span class="hljs-string">'l-1'</span>
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-variable">$font</span>-size-l-<span class="hljs-number">1</span>
+    <span class="hljs-attribute">line-height</span>: <span class="hljs-variable">$line</span>-height-l-<span class="hljs-number">1</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> n == <span class="hljs-string">'l-2'</span>
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-variable">$font</span>-size-l-<span class="hljs-number">2</span>
+    <span class="hljs-attribute">line-height</span>: <span class="hljs-variable">$line</span>-height-l-<span class="hljs-number">2</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> n == <span class="hljs-string">'l-3'</span>
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-variable">$font</span>-size-l-<span class="hljs-number">3</span>
+    <span class="hljs-attribute">line-height</span>: <span class="hljs-variable">$line</span>-height-l-<span class="hljs-number">3</span></code></pre></p>
+<p><strong>色彩</strong><br>官方提供了6种可配置的颜色，都是大自然的颜色！灵感来源就是大自然啊。如果你一个都不喜欢，那就自己去代码里面改了。<br><pre><code class="hljs bash"><span class="hljs-comment"># theme color</span>
+main_color: default <span class="hljs-comment"># forest | grass | sky | sun | sea</span></code></pre></p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/paper-github-4.png" alt></p>
+<p><strong>对于自己设计的评价(tu cao)</strong></p>
+<ul>
+<li>拼命想设计出paper的感觉，但是又不够paper。心有余而力不足，设计能力还是欠佳。</li>
+<li>字体没有好好的琢磨，采用了比较通用的方案。导致整体设计缺少精致感。</li>
+<li>阅读体验不够好，比如没有目录等等。精力有限，后续可能会加上。</li>
+<li>…</li>
+</ul>
+<h3 id="编码部分"><a href="#编码部分" class="headerlink" title="编码部分"></a>编码部分</h3><p><strong>hexo主题的开发</strong><br>其实设计才是最难的部分，编码反而简单，只是有点“烦人”。因为开发hexo的主题，用的是以前的前端开发方式——写模版。对我来说，还是第一次写这种模版，而我已经习惯了基于vue、react的单页面开发模式。所以会感觉比较“烦人”。不过其中有很多思想也是相似的，例如，组件化的思想。</p>
+<p>hexo主题的开发，网络上已经有很多相关的文章，我也没必要再说一遍。这里推荐一篇博客，几乎涵盖了所有开发相关的问题。</p>
+<blockquote>
+<p><a href="https://molunerfinn.com/make-a-hexo-theme/" target="_blank" rel="noopener">https://molunerfinn.com/make-a-hexo-theme/</a></p>
+</blockquote>
+<p><strong>darkmode</strong><br>开启的地方在这：<br><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/20191214193636.png" alt><br>这里算是一个小彩蛋，具体的实现方式可以到代码里面去看，就几十行。<br>不过可以告知的是，<strong>我并没有</strong>修改页面中元素自身的css。例如字体颜色<code>color</code>，我并没有去修改这个属性。而是给全局加了个“滤镜”。</p>
+<p>我个人认为这个方法还是比较巧妙的。其实就是一种偷懒的行为，因为我不想再去单独的针对darkmode设计多套配色。加一层“滤镜”可以在偷懒和效果之间达到一种比较好的平衡。效果肯定是比不上针对darkmode去重新搭配颜色的，但是也还过得去，不是吗。</p>
+<p>其实关于编码部分，真的没有太多的感悟，就是照着自己的设计去一点点实现。</p>
+<h3 id="btw"><a href="#btw" class="headerlink" title="btw"></a>btw</h3><p>最后，如果你真的觉得paper不错，那还是欢迎使用，再过分一点还可以点赞。但是我要提醒你，它真的不太好“用”😂，后面有时间再优化吧。具体使用相关的信息可以在<a href="https://github.com/OfficialYoungX/paper" target="_blank" rel="noopener">github</a>上找到。</p>
+<p>这篇文章除了介绍自己好不容易完成的主题以外，还是想告诉大家，下次找不到自己觉得好看的主题，不如试试自己的写一个。过程是挺烦的，但是最后完成了还是开心的。不管它有没有人用，别人觉得怎么样，自己看到都会很有成就感。毕竟就算是只有你一个人用你自己的主题，那你的博客主题就是独一无二的啊。</p>
+<p><img src="https://source-hosting.oss-cn-shanghai.aliyuncs.com/article-tail@3x.png" alt="tail"></p>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/random-yang">Github</a></li><li><a href="https://codepen.io/randomyang">Codepen</a></li><li><a href="https://dribbble.com/randomyang">Dribbble</a></li><li><a href="https://twitter.com/JHWviuDZH8bcvuM">Twitter</a></li><li><a href="mailto:decoderyang@gmail.com">Email</a></li><li><a href="/atom.xml">Rss</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Graphic/">Graphic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regex/">Regex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebGL/">WebGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blend-mode/">blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog主题/">blog主题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css3/">css3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/design/">design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/filter/">filter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/front-end/">front-end</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/glsl/">glsl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/interesting/">interesting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mix-blend-mode/">mix-blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openGL/">openGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/p5-js/">p5.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/parallax/">parallax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pixel/">pixel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg/">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webAudio/">webAudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/借鉴/">借鉴</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/像素/">像素</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/单位/">单位</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础/">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符画/">字符画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开发/">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/摘记/">摘记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/易混/">易混</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/正则表达式/">正则表达式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/浏览器/">浏览器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/深度学习/">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/视差滚动/">视差滚动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/计算机图形学/">计算机图形学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2020/03/08/译-使用WebGL创建伪3D图像效果/">[译]使用WebGL创建伪3D图像效果</a><a class="next-button" href="/2019/11/02/译-使用Three-js制作Gooey图像悬停效果/">[译]使用Three.js制作有粘稠感的图像悬停效果</a></div><div id="comments"></div></div></div></div><div class="footer"><span>©️2019-2020 Designed By&nbsp;<strong><a href="https://github.com/OfficialYoungX">RandomYang</a></strong> Powered By&nbsp;</span><strong><a href="https://hexo.io">hexo</a></strong></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>

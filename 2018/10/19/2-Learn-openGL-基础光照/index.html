@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="(2)Learning openGL--基础光照 [ RandomYang ] "><meta name="theme-color" content="#ebc65a"><title>(2)Learning openGL--基础光照 [ RandomYang ] </title><link rel="shortcut icon" href="https://source-hosting.oss-cn-shanghai.aliyuncs.com/randomyang-favicon.png"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-151544816-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-151544816-1');</script><script src="https://www.unpkg.com/valine/dist/Valine.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  new Valine({
+    el: '#comments',
+    appId: '1JY5EfOoNSaiEGcXhwrCs7dk-gzGzoHsz',
+    appKey: 'jXutXUNavOPDp92k9gQuMsv9',
+    notify: false,
+    verify: false,
+    avatar: 'mp',
+    placeholder: 'Say something...',
+  })
+})</script><script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:500,700&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><link rel="alternate" href="/atom.xml" title="RandomYang" type="application/atom+xml">
+</head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">RandomYang</a></h1><p>Code + Design =&gt; Magic</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">(2)Learning openGL--基础光照</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href>(2)Learning openGL--基础光照</a></h2><span class="post__date">2018-10-19</span><a href="/tags/Graphic/"><span class="post__tags">#Graphic</span></a><a href="/tags/计算机图形学/"><span class="post__tags">#计算机图形学</span></a><a href="/tags/openGL/"><span class="post__tags">#openGL</span></a></div></div><div class="article__content"><p><strong>Content</strong><br>[TOC]</p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><h4 id="冯氏光照模型-Phong-Lighting-Model"><a href="#冯氏光照模型-Phong-Lighting-Model" class="headerlink" title="冯氏光照模型(Phong Lighting Model)"></a>冯氏光照模型(Phong Lighting Model)</h4><p>主要结构为3个分量组成：</p>
+<ul>
+<li>环境光(Ambient)<br>模拟永不消逝的光源，即便是在黑暗的环境下物体也不会是全黑。</li>
+<li>漫反射光(Diffuse)<br>模拟光源对物体的方向性的影响，这是冯氏光照模型中最为显著的分量。</li>
+<li>镜面光(Specular)<br>模拟有光泽物体上面出现的亮点。镜面光照的颜色相比于物体的颜色会更倾向于光的颜色。</li>
+</ul>
+<h4 id="环境光"><a href="#环境光" class="headerlink" title="环境光"></a>环境光</h4><p>光线通常都不是来自于一个光源，光能够在其他表面产生反射，为了模拟这一效果，有一个叫做<strong>全局照明（Global Illumination）算法</strong>（比较复杂）。<br><strong>环境光照</strong>是简化的<strong>全局照明</strong>。这样子的话即便场景中没有直接的光源也能看起来存在有一些发散的光。<br>片段着色器看起来可能像这样：<br><pre><code class="hljs undefined"><span class="hljs-type">void</span> main()
+&#123;
+    <span class="hljs-type">float</span> ambientStrength = <span class="hljs-number">0.1</span>; <span class="hljs-comment">// 小常数</span>
+    <span class="hljs-type">vec3</span> ambient = ambientStrength * lightColor;
+    <span class="hljs-type">vec3</span> result = ambient * objectColor;
+    FragColor = <span class="hljs-type">vec4</span>(result, <span class="hljs-number">1.0</span>);
+&#125;</code></pre></p>
+<p>现在立方体看起来大概是这样：<br><img src="/2018/10/19/2-Learn-openGL-基础光照/1.0.png" alt="1.0"><br>这种折射、反射得到的一个<strong>宏观</strong>的结果。</p>
+<h4 id="漫反射光照"><a href="#漫反射光照" class="headerlink" title="漫反射光照"></a>漫反射光照</h4><p>环境光照本身不能提供有趣的结果，但是<strong>漫反射光照</strong>开始对物体产生显著的影响。<br>如果光线垂直于物体表面，这束光对物体的影响会最大化（更亮）。照射光线与<strong>法向量</strong>的夹角将会影响这一结果。通过单位向量的点乘可以很容易的计算出这个夹角。<br>所以计算漫反射夹角需要</p>
+<ul>
+<li>法向量：一个垂直于顶点表面的向量。</li>
+<li>定向的光线：作为光源的位置与片段的位置之间向量差的方向向量。为了计算这个光线，我们需要光的位置向量和片段的位置向量（向量相减）。</li>
+</ul>
+<h4 id="法向量"><a href="#法向量" class="headerlink" title="法向量"></a>法向量</h4><p>计算顶点的法向量：利用顶点周围的点叉乘，来计算顶点的法向量。<br>简单的法向量我们可以手动的输入，比如这里的构成立方体的36个顶点的法向量(第4、5、6列)：<br><pre><code class="hljs undefined"><span class="hljs-built_in">float</span> vertices[] = &#123;
+    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,
+     <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>, 
+     <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>, 
+     <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>, 
+    <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>, 
+    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>, 
+
+    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>,
+     <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>,
+     <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>,
+     <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>,
+    <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>,
+    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>,
+
+    <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+    <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+    <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+
+     <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+     <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+     <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+     <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+     <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+     <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">0.0f</span>,
+
+    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,
+     <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,
+     <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,
+     <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,
+    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,
+    <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>, <span class="hljs-number">-1.0f</span>,  <span class="hljs-number">0.0f</span>,
+
+    <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,
+     <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,
+     <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,
+     <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,
+    <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>,
+    <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.5f</span>, <span class="hljs-number">-0.5f</span>,  <span class="hljs-number">0.0f</span>,  <span class="hljs-number">1.0f</span>,  <span class="hljs-number">0.0f</span>
+&#125;;</code></pre></p>
+<h4 id="计算漫反射光照"><a href="#计算漫反射光照" class="headerlink" title="计算漫反射光照"></a>计算漫反射光照</h4><p>物体的<code>顶点着色器</code>：<br><pre><code class="hljs undefined"><span class="hljs-meta">#version 330 core</span>
+<span class="hljs-keyword">layout</span> (<span class="hljs-keyword">location</span> = <span class="hljs-number">0</span>) <span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> aPos;
+<span class="hljs-keyword">layout</span> (<span class="hljs-keyword">location</span> = <span class="hljs-number">1</span>) <span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> aNormal;
+
+<span class="hljs-keyword">out</span> <span class="hljs-type">vec3</span> FragPos;
+<span class="hljs-keyword">out</span> <span class="hljs-type">vec3</span> Normal;
+
+<span class="hljs-keyword">uniform</span> <span class="hljs-type">mat4</span> model;
+<span class="hljs-keyword">uniform</span> <span class="hljs-type">mat4</span> view;
+<span class="hljs-keyword">uniform</span> <span class="hljs-type">mat4</span> projection;
+
+<span class="hljs-type">void</span> main()
+&#123;
+    FragPos = <span class="hljs-type">vec3</span>(model * <span class="hljs-type">vec4</span>(aPos, <span class="hljs-number">1.0</span>)); <span class="hljs-comment">// 将片段坐标转换到世界空间</span>
+    Normal = aNormal;
+    
+    <span class="hljs-built_in">gl_Position</span> = projection * view * <span class="hljs-type">vec4</span>(FragPos, <span class="hljs-number">1.0</span>);
+&#125;</code></pre></p>
+<p>物体的<code>片段着色器</code><br><pre><code class="hljs undefined"><span class="hljs-meta">#version 330 core</span>
+<span class="hljs-keyword">out</span> <span class="hljs-type">vec4</span> FragColor;
+
+<span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> Normal;  
+<span class="hljs-keyword">in</span> <span class="hljs-type">vec3</span> FragPos;  
+  
+<span class="hljs-keyword">uniform</span> <span class="hljs-type">vec3</span> lightPos; 
+<span class="hljs-keyword">uniform</span> <span class="hljs-type">vec3</span> lightColor;
+<span class="hljs-keyword">uniform</span> <span class="hljs-type">vec3</span> objectColor;
+
+<span class="hljs-type">void</span> main()
+&#123;
+    <span class="hljs-comment">// ambient</span>
+    <span class="hljs-type">float</span> ambientStrength = <span class="hljs-number">0.1</span>;
+    <span class="hljs-type">vec3</span> ambient = ambientStrength * lightColor;
+  	
+    <span class="hljs-comment">// diffuse </span>
+    <span class="hljs-type">vec3</span> norm = <span class="hljs-built_in">normalize</span>(Normal); <span class="hljs-comment">// 单位向量</span>
+    <span class="hljs-type">vec3</span> lightDir = <span class="hljs-built_in">normalize</span>(lightPos - FragPos); <span class="hljs-comment">// 计算光线照射向量</span>
+    <span class="hljs-type">float</span> diff = <span class="hljs-built_in">max</span>(<span class="hljs-built_in">dot</span>(norm, lightDir), <span class="hljs-number">0.0</span>); <span class="hljs-comment">// 计算漫反射系数</span>
+    <span class="hljs-type">vec3</span> diffuse = diff * lightColor; <span class="hljs-comment">// 计算光线实际的作用效果</span>
+            
+    <span class="hljs-type">vec3</span> result = (ambient + diffuse) * objectColor; <span class="hljs-comment">// 综合漫反射、环境光的影响</span>
+    FragColor = <span class="hljs-type">vec4</span>(result, <span class="hljs-number">1.0</span>); 
+&#125;</code></pre></p>
+<p><img src="/2018/10/19/2-Learn-openGL-基础光照/2.0.png" alt="2.0"></p>
+<h4 id="抵消model矩阵对法向量的形变"><a href="#抵消model矩阵对法向量的形变" class="headerlink" title="抵消model矩阵对法向量的形变"></a>抵消model矩阵对法向量的形变</h4><p>每当我们应用一个<strong>不等比缩放</strong>时（注意：等比缩放不会破坏法线，因为法线的方向没被改变，仅仅改变了法线的长度，而这很容易通过标准化来修复），法向量就不会再垂直于对应的表面了，这样光照就会被破坏。</p>
+<p>使用一个为法向量专门定制的模型矩阵。这个矩阵称之为<strong>法线矩阵(Normal Matrix)</strong>，它使用了一些线性代数的操作来移除对法向量错误缩放的影响。</p>
+<p>在顶点着色器中，我们可以使用inverse和transpose函数自己生成这个法线矩阵，这两个函数对所有类型矩阵都有效。注意我们还要把被处理过的矩阵强制转换为3×3矩阵，来保证它失去了位移属性以及能够乘以vec3的法向量。</p>
+<p>修改着色器：<br><pre><code class="hljs undefined">Normal = mat3(<span class="hljs-name">transpose</span>(<span class="hljs-name">inverse</span>(<span class="hljs-name">model</span>))) * aNormal<span class="hljs-comment">;</span></code></pre></p>
+<h4 id="镜面光照"><a href="#镜面光照" class="headerlink" title="镜面光照"></a>镜面光照</h4><p>我们计算反射向量和视线方向的角度差，如果夹角越小，那么镜面光的影响就会越大。它的作用效果就是，当我们去看光被物体所反射的那个方向的时候，我们会看到一个高光。</p>
+<p>在<code>C++</code>中将摄像机位置向量传入<br><pre><code class="hljs undefined">lightingShader.set<span class="hljs-constructor">Vec3(<span class="hljs-string">"viewPos"</span>, <span class="hljs-params">camera</span>.Position)</span>;</code></pre></p>
+<p>在着色器添加：<br><pre><code class="hljs undefined"><span class="hljs-keyword">uniform</span> <span class="hljs-type">vec3</span> viewPos; <span class="hljs-comment">// 镜面强度(Specular Intensity)变量，给镜面高光一个中等亮度颜色，让它不要产生过度的影响。</span>
+<span class="hljs-type">vec3</span> viewDir = <span class="hljs-built_in">normalize</span>(viewPos - FragPos); <span class="hljs-comment">// 计算得到视觉方向向量</span>
+<span class="hljs-type">vec3</span> reflectDir = <span class="hljs-built_in">reflect</span>(-lightDir, norm); <span class="hljs-comment">// reflect函数要求第一个向量是从光源指向片段位置的向量</span>
+<span class="hljs-type">float</span> spec = <span class="hljs-built_in">pow</span>(<span class="hljs-built_in">max</span>(<span class="hljs-built_in">dot</span>(viewDir, reflectDir), <span class="hljs-number">0.0</span>), <span class="hljs-number">32</span>); <span class="hljs-comment">// 32越大越光滑，反射性越强</span>
+<span class="hljs-type">vec3</span> specular = specularStrength * spec * lightColor; <span class="hljs-comment">// 计算镜面分量</span></code></pre></p>
+<p>最终的着色器输出颜色：<br><pre><code class="hljs undefined">vec3 result = (<span class="hljs-name">ambient</span> + diffuse + specular) * objectColor<span class="hljs-comment">;</span>
+FragColor = vec4(<span class="hljs-name">result</span>, <span class="hljs-number">1.0</span>)<span class="hljs-comment">;</span></code></pre></p>
+<p>截止到目前，他看起来像这样：<br><img src="/2018/10/19/2-Learn-openGL-基础光照/3.0.png" alt="3.0"><br>很显然更加的有“<strong>光泽</strong>”一些。</p>
+<h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><p><a href="https://learnopengl-cn.github.io/01%20Getting%20started/09%20Camera/" target="_blank" rel="noopener">learning openGL中文教程</a>该教程翻译自<a href="https://learnopengl.com" target="_blank" rel="noopener">原英文教程</a>，整个教程讲解得详细而且专业，不但告诉你如何用代码实现，而且还会从原理剖析。原理讲解不僵硬，生动详细。稍微耐心的阅读教程的讲解，就能理解其中的每一个细节原理。让你知其然并且知其所以然，是一篇很好的教程。</p>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/random-yang">Github</a></li><li><a href="https://codepen.io/randomyang">Codepen</a></li><li><a href="https://dribbble.com/randomyang">Dribbble</a></li><li><a href="https://twitter.com/JHWviuDZH8bcvuM">Twitter</a></li><li><a href="mailto:decoderyang@gmail.com">Email</a></li><li><a href="/atom.xml">Rss</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/3D/">3D</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Graphic/">Graphic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regex/">Regex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebGL/">WebGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blend-mode/">blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog主题/">blog主题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css3/">css3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/design/">design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/filter/">filter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/front-end/">front-end</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/glsl/">glsl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/interesting/">interesting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mix-blend-mode/">mix-blend-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openGL/">openGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/p5-js/">p5.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/parallax/">parallax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pixel/">pixel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg/">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webAudio/">webAudio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/借鉴/">借鉴</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/像素/">像素</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端/">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/单位/">单位</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础/">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符画/">字符画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开发/">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/摘记/">摘记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/易混/">易混</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/正则表达式/">正则表达式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/浏览器/">浏览器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/深度学习/">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/视差滚动/">视差滚动</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/计算机图形学/">计算机图形学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2018/11/09/pygmies/">pygmies</a><a class="next-button" href="/2018/10/17/1-Learn-openGL-进入3D世界/">(1)Learning openGL--进入3D世界</a></div><div id="comments"></div></div></div></div><div class="footer"><span>©️2019-2020 Designed By&nbsp;<strong><a href="https://github.com/OfficialYoungX">RandomYang</a></strong> Powered By&nbsp;</span><strong><a href="https://hexo.io">hexo</a></strong></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>
