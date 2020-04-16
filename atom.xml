@@ -134,37 +134,6 @@
   </entry>
   
   <entry>
-    <title>我在2019，找实习</title>
-    <link href="http://www.randomyang.top/2019/03/31/%E6%88%91%E5%9C%A82019%EF%BC%8C%E6%89%BE%E5%AE%9E%E4%B9%A0/"/>
-    <id>http://www.randomyang.top/2019/03/31/%E6%88%91%E5%9C%A82019%EF%BC%8C%E6%89%BE%E5%AE%9E%E4%B9%A0/</id>
-    <published>2019-03-31T15:15:30.000Z</published>
-    <updated>2020-03-06T05:05:44.064Z</updated>
-    
-    <content type="html"><![CDATA[<p>下面的内容是我在准备 2019 年实习的过程中的一些学习记录。不见得全是正确的结论，但总的来讲是参考了很多的相关资料。自己查漏补缺的同时也学到了不少新的东西。</p><p><strong><a href="pdf版.pdf">稍有排版的pdf</a></strong></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;下面的内容是我在准备 2019 年实习的过程中的一些学习记录。不见得全是正确的结论，但总的来讲是参考了很多的相关资料。自己查漏补缺的同时也学到了不少新的东西。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;pdf版.pdf&quot;&gt;稍有排版的pdf&lt;/a&gt;&lt;/strong&gt;&lt;/
-      
-    
-    </summary>
-    
-    
-    
-      <category term="总结" scheme="http://www.randomyang.top/tags/%E6%80%BB%E7%BB%93/"/>
-    
-      <category term="实习" scheme="http://www.randomyang.top/tags/%E5%AE%9E%E4%B9%A0/"/>
-    
-      <category term="面试" scheme="http://www.randomyang.top/tags/%E9%9D%A2%E8%AF%95/"/>
-    
-      <category term="前端" scheme="http://www.randomyang.top/tags/%E5%89%8D%E7%AB%AF/"/>
-    
-  </entry>
-  
-  <entry>
     <title>正了个则</title>
     <link href="http://www.randomyang.top/2019/03/31/%E6%AD%A3%E4%BA%86%E4%B8%AA%E5%88%99/"/>
     <id>http://www.randomyang.top/2019/03/31/%E6%AD%A3%E4%BA%86%E4%B8%AA%E5%88%99/</id>
@@ -216,13 +185,13 @@
     
     
     
+      <category term="总结" scheme="http://www.randomyang.top/tags/%E6%80%BB%E7%BB%93/"/>
+    
       <category term="css" scheme="http://www.randomyang.top/tags/css/"/>
     
       <category term="filter" scheme="http://www.randomyang.top/tags/filter/"/>
     
       <category term="blend-mode" scheme="http://www.randomyang.top/tags/blend-mode/"/>
-    
-      <category term="总结" scheme="http://www.randomyang.top/tags/%E6%80%BB%E7%BB%93/"/>
     
       <category term="易混" scheme="http://www.randomyang.top/tags/%E6%98%93%E6%B7%B7/"/>
     
@@ -323,6 +292,40 @@
       <category term="深度学习" scheme="http://www.randomyang.top/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
       <category term="ML" scheme="http://www.randomyang.top/tags/ML/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>视频转字符画</title>
+    <link href="http://www.randomyang.top/2018/11/18/%E8%A7%86%E9%A2%91%E8%BD%AC%E5%AD%97%E7%AC%A6%E7%94%BB/"/>
+    <id>http://www.randomyang.top/2018/11/18/%E8%A7%86%E9%A2%91%E8%BD%AC%E5%AD%97%E7%AC%A6%E7%94%BB/</id>
+    <published>2018-11-18T03:50:11.000Z</published>
+    <updated>2020-03-08T05:19:55.969Z</updated>
+    
+    <content type="html"><![CDATA[<!-- # 视频转字符画 --><h3 id="什么是字符画"><a href="#什么是字符画" class="headerlink" title="什么是字符画"></a>什么是字符画</h3><blockquote><p>字符画，一种由字母、标点、汉字或其他字符组成的图画。简单的字符画是利用字符的形状代替图画的线条来构成简单的人物、事物等形象。<br>摘自<a href="https://baike.baidu.com/item/字符画/1347002?fr=aladdin" target="_blank" rel="noopener">百度百科</a></p></blockquote><p>我的理解是，将像素点的<strong>rgb</strong>转化为灰度，再将<strong>灰度值</strong>映射到某个<strong>字符集合</strong>（集合不唯一，可以自己定义，只要相互的形态对比度和灰度相符合就行了）</p><h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>利用前端技术，具体说是canvas画布。实现下图的效果，将播放的视频动态的转化为对应的动态字符画。<br><a href="https://www.bilibili.com/video/av28184940" target="_blank" rel="noopener">这里是效果预览</a>(bilibili源)</p><p><img src="/2018/11/18/视频转字符画/1.0.png" alt="1.0"></p><h3 id="canvas实现"><a href="#canvas实现" class="headerlink" title="canvas实现"></a>canvas实现</h3><ol><li>利用canvas从视频中<strong>间隔取样</strong></li><li>得到的取样（图片）信息转化为字符串</li><li>字符串插入到textarea</li><li>重复123步骤，即<strong>动态字符画</strong></li></ol><p><a href="https://github.com/OfficialYoungX/CodeBoard/blob/master/video2charMap.html" target="_blank" rel="noopener">完整的代码</a><br>主要的javascript代码（部分html和css不太重要）：<br><pre><code class="hljs undefined"><span class="hljs-comment">// 获取video 和 canvas 的引用</span>  <span class="hljs-keyword">let</span> video = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'v'</span>);  <span class="hljs-keyword">let</span> canvas = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'c'</span>);  <span class="hljs-keyword">let</span> textArea = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'text-area'</span>);  <span class="hljs-comment">// 获取canvas 2D上下文对象</span>  <span class="hljs-keyword">let</span> ctx = canvas.getContext(<span class="hljs-string">'2d'</span>);  <span class="hljs-keyword">let</span> vStyleWidth;  <span class="hljs-keyword">let</span> vStyleHeight;  video.onloadedmetadata = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;      canvas.width = video.videoWidth; <span class="hljs-comment">// 视频宽度</span>      canvas.height = video.videoHeight; <span class="hljs-comment">// 视频高度</span>      vStyleWidth = canvas.width;      vStyleHeight = canvas.height;  &#125;  <span class="hljs-comment">// 根据 rgb 值得到灰度值</span>  <span class="hljs-keyword">let</span> getGray = <span class="hljs-function">(<span class="hljs-params">r, g, b</span>) =&gt;</span> &#123;      <span class="hljs-keyword">return</span> <span class="hljs-number">0.299</span> * r + <span class="hljs-number">0.578</span> * g + <span class="hljs-number">0.114</span> * b; <span class="hljs-comment">// 灰度值的浮点算法</span>  &#125;  <span class="hljs-comment">// 灰度值映射到字符</span>  <span class="hljs-keyword">let</span> mapToChar = <span class="hljs-function">(<span class="hljs-params">grayIndex</span>) =&gt;</span> &#123;      <span class="hljs-keyword">const</span> d = <span class="hljs-number">16</span>;      <span class="hljs-keyword">let</span> index = <span class="hljs-built_in">Math</span>.floor(grayIndex / d);      <span class="hljs-keyword">const</span> chars = [<span class="hljs-string">'@'</span>, <span class="hljs-string">'W'</span>, <span class="hljs-string">'#'</span>, <span class="hljs-string">'$'</span>, <span class="hljs-string">'O'</span>, <span class="hljs-string">'E'</span>, <span class="hljs-string">'X'</span>, <span class="hljs-string">'C'</span>, <span class="hljs-string">'['</span>, <span class="hljs-string">'('</span>, <span class="hljs-string">'/'</span>, <span class="hljs-string">'?'</span>, <span class="hljs-string">'='</span>, <span class="hljs-string">'^'</span>, <span class="hljs-string">'~'</span>, <span class="hljs-string">'_'</span>, <span class="hljs-string">'.'</span>, <span class="hljs-string">'`'</span>];      <span class="hljs-keyword">return</span> chars[index];  &#125;  <span class="hljs-comment">// 填充到textarea</span>  <span class="hljs-keyword">let</span> image2char = <span class="hljs-function">(<span class="hljs-params">ctx, width, height</span>) =&gt;</span> &#123;      <span class="hljs-comment">// 获取canvas上的图像信息</span>      <span class="hljs-keyword">let</span> imageData = ctx.getImageData(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, width, height);      <span class="hljs-keyword">let</span> imageDataArr = imageData.data; <span class="hljs-comment">// 图像信息数组</span>      <span class="hljs-keyword">let</span> imgDataWidth = imageData.width; <span class="hljs-comment">// 矩阵纬度</span>      <span class="hljs-keyword">let</span> imgDataHeight = imageData.height;      <span class="hljs-keyword">let</span> innerContext = <span class="hljs-string">''</span>;      <span class="hljs-keyword">let</span> p = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'p'</span>);      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> h = <span class="hljs-number">0</span>; h &lt; imgDataHeight; h += <span class="hljs-number">10</span>) &#123;          <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> w = <span class="hljs-number">0</span>; w &lt; imgDataWidth; w += <span class="hljs-number">6</span>) &#123;              <span class="hljs-keyword">let</span> index = (w + imgDataWidth * h) * <span class="hljs-number">4</span>; <span class="hljs-comment">// r b g a = 4个宽度</span>              <span class="hljs-keyword">let</span> r = imageDataArr[index + <span class="hljs-number">0</span>];              <span class="hljs-keyword">let</span> g = imageDataArr[index + <span class="hljs-number">1</span>];              <span class="hljs-keyword">let</span> b = imageDataArr[index + <span class="hljs-number">2</span>];              <span class="hljs-keyword">const</span> gray = getGray(r, g, b); <span class="hljs-comment">// 得到灰度值</span>              innerContext += <span class="hljs-string">`<span class="hljs-subst">$&#123;mapToChar(gray)&#125;</span>`</span>; <span class="hljs-comment">// 灰度值映射到字符</span>          &#125;          innerContext += <span class="hljs-string">'\n'</span>;      &#125;      textArea.value = innerContext;  &#125;  <span class="hljs-keyword">let</span> animationHook; <span class="hljs-comment">// 暂停hook</span>  <span class="hljs-keyword">let</span> draw = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;      animationHook = requestAnimationFrame(draw);      <span class="hljs-comment">// 从视频等间隔取样</span>      ctx.drawImage(video, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, vStyleWidth, vStyleHeight);      <span class="hljs-comment">// 生成的字符串输出到textarea</span>      image2char(ctx, vStyleWidth, vStyleHeight);  &#125;  video.addEventListener(<span class="hljs-string">'play'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;      draw();  &#125;, <span class="hljs-literal">false</span>);  video.addEventListener(<span class="hljs-string">'pause'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;      <span class="hljs-built_in">window</span>.cancelAnimationFrame(animationHook);  &#125;, <span class="hljs-literal">false</span>);  video.addEventListener(<span class="hljs-string">'ended'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;      <span class="hljs-built_in">window</span>.clearInterval(animationHook);  &#125;, <span class="hljs-literal">false</span>);</code></pre></p><h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ol><li>rgb转灰度算法，又去<a href="https://www.baidu.com/link?url=-k-EdwWqAU35nrxnZL998OgCWcIIbdhLIxdtyIfCqvEjhctgBBtPJcgd3MGlLegNjbS-uZZ9MkT6bgWV_uiWPRa5hSO78IXg3vln6AXRDz5vrdUbuXLTbpsvdzt5PCaT&amp;wd=&amp;eqid=a5cc962a00270a76000000055c1f8297" target="_blank" rel="noopener">百度百科</a></li><li>注意字符集合中字符的相互的形态对比度</li><li>利用Image.data获取图片的像素信息</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;!-- # 视频转字符画 --&gt;
+&lt;h3 id=&quot;什么是字符画&quot;&gt;&lt;a href=&quot;#什么是字符画&quot; class=&quot;headerlink&quot; title=&quot;什么是字符画&quot;&gt;&lt;/a&gt;什么是字符画&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;字符画，一种由字母、标点、汉字或其他字符组成的
+      
+    
+    </summary>
+    
+    
+    
+      <category term="Graphic" scheme="http://www.randomyang.top/tags/Graphic/"/>
+    
+      <category term="front-end" scheme="http://www.randomyang.top/tags/front-end/"/>
+    
+      <category term="canvas" scheme="http://www.randomyang.top/tags/canvas/"/>
+    
+      <category term="javascript" scheme="http://www.randomyang.top/tags/javascript/"/>
+    
+      <category term="字符画" scheme="http://www.randomyang.top/tags/%E5%AD%97%E7%AC%A6%E7%94%BB/"/>
     
   </entry>
   
